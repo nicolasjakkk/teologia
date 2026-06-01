@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estudios Bíblicos — Teología Logos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:     #1a1610;
+      --bg2:    #221e16;
+      --bg3:    #2c2619;
+      --gold:   #c8a84b;
+      --gold2:  #e8d48a;
+      --cream:  #f0ead8;
+      --muted:  #9a9080;
+      --border: rgba(200,168,75,0.18);
+      --serif:  'Cinzel', serif;
+      --display:'Cinzel Decorative', cursive;
+      --body:   'EB Garamond', serif;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--body);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .cursor      { position:fixed; width:8px; height:8px; background:var(--gold); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--gold); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); opacity:0.4; transition:width .2s,height .2s; }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.2rem 3.5rem;
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(16px);
+      background:rgba(26,22,16,0.9);
+    }
+    .nav-logo { font-family:var(--display); font-size:12px; letter-spacing:0.14em; color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:10px; }
+    .logo-mark { width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--serif); }
+    .nav-center { display:flex; list-style:none; border:1px solid var(--border); }
+    .nav-center li a { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); text-decoration:none; padding:10px 28px; display:block; background:rgba(200,168,75,0.06); }
+    .nav-right { font-family:var(--serif); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); width:160px; text-align:right; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 9rem 4rem 4rem;
+      border-bottom: 1px solid var(--border);
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(200,168,75,0.04) 0%, transparent 70%);
+    }
+
+    .breadcrumb {
+      font-family:var(--serif); font-size:10px; letter-spacing:0.22em;
+      text-transform:uppercase; color:var(--muted);
+      margin-bottom:1.5rem;
+      display:flex; align-items:center; gap:10px;
+    }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .breadcrumb .sep { opacity:0.35; }
+
+    .page-header h1 {
+      font-family:var(--display);
+      font-size:clamp(2rem, 5vw, 4rem);
+      color:var(--cream); font-weight:400;
+      margin-bottom:0.7rem;
+    }
+
+    .page-header .desc {
+      font-family:var(--body); font-style:italic;
+      font-size:1rem; color:var(--muted);
+      max-width:480px; line-height:1.7;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4.5rem 4rem 7rem;
+    }
+
+    /* ── GRID LABEL ── */
+    .grid-label {
+      font-family:var(--serif); font-size:10px; letter-spacing:0.38em;
+      text-transform:uppercase; color:var(--gold);
+      margin-bottom:2rem;
+      display:flex; align-items:center; gap:14px;
+    }
+    .grid-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── CARDS GRID ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 4rem;
+    }
+
+    /* Card base */
+    .study-card {
+      background: var(--bg);
+      padding: 2.2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: background 0.35s;
+    }
+
+    /* Barra dorada top al hover */
+    .study-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .study-card.active::before { transform: scaleX(1); }
+    .study-card:not(.disabled):hover { background: rgba(200,168,75,0.04); }
+    .study-card:not(.disabled):hover::before { transform: scaleX(1); }
+
+    /* número decorativo */
+    .card-bg-ref {
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      font-family: var(--display);
+      font-size: 2.8rem;
+      color: rgba(200,168,75,0.07);
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.02em;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-ref {
+      font-family: var(--serif);
+      font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.6;
+    }
+
+    .card-status-active {
+      font-family: var(--serif);
+      font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(200,168,75,0.35);
+      padding: 3px 10px;
+    }
+
+    .card-status-soon {
+      font-family: var(--serif);
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid rgba(150,140,120,0.2);
+      padding: 3px 10px;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1.05rem; letter-spacing: 0.05em;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+    }
+
+    .card-excerpt {
+      font-family: var(--body);
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .card-footer {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-tags {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: var(--serif);
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid rgba(150,140,120,0.2);
+      padding: 3px 8px;
+    }
+
+    .card-arrow {
+      font-family: var(--serif);
+      font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .study-card:not(.disabled):hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* disabled overlay */
+    .study-card.disabled {
+      cursor: default;
+      opacity: 0.38;
+    }
+
+    .ornament { text-align:center; color:rgba(200,168,75,0.22); font-size:0.9rem; letter-spacing:0.6em; padding:1rem 0 0; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:2.5rem 4rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-logo { font-family:var(--display); font-size:11px; letter-spacing:0.14em; color:var(--gold); }
+    .footer-copy  { font-family:var(--serif); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.8s, transform 0.8s; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="logo-mark">Λ</span>
+    Teología Logos
+  </a>
+  <ul class="nav-center">
+    <li><a href="estudios.html">Estudios Bíblicos</a></li>
+  </ul>
+  <div class="nav-right">In principio erat Verbum</div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a>
+    <span class="sep">›</span>
+    <span style="color:var(--cream);">Estudios Bíblicos</span>
+  </div>
+  <h1>Estudios Bíblicos</h1>
+  <p class="desc">Análisis versículo a versículo de las Sagradas Escrituras. Exégesis, contexto y reflexión teológica.</p>
+</header>
+
+<main class="content">
+
+  <p class="grid-label reveal">Estudios disponibles</p>
+
+  <div class="cards-grid reveal">
+
+    <!-- ✅ ACTIVO: Colosenses 1:17-18 -->
+    <a class="study-card active" href="col-1-17-18.html">
+      <span class="card-bg-ref">1:17</span>
+      <div class="card-top">
+        <span class="card-ref">Colosenses · 1:17–18</span>
+        <span class="card-status-active">Disponible</span>
+      </div>
+      <h2 class="card-title">La preeminencia de Cristo</h2>
+      <p class="card-excerpt">Cristo como principio de cohesión ontológica de todo lo creado y cabeza de la iglesia, la nueva humanidad.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Cristología</span>
+          <span class="tag">Colosenses</span>
+        </div>
+        <span class="card-arrow">Leer →</span>
+      </div>
+    </a>
+
+    <!-- Próximamente -->
+    <div class="study-card disabled">
+      <span class="card-bg-ref">1:15</span>
+      <div class="card-top">
+        <span class="card-ref">Colosenses · 1:15–16</span>
+        <span class="card-status-soon">Próximamente</span>
+      </div>
+      <h2 class="card-title">Imagen del Dios invisible</h2>
+      <p class="card-excerpt">El himno cristológico y la deidad plena del Logos encarnado frente al gnosticismo incipiente en Colosas.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Cristología</span>
+          <span class="tag">Colosenses</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-card disabled">
+      <span class="card-bg-ref">1:1</span>
+      <div class="card-top">
+        <span class="card-ref">Juan · 1:1–14</span>
+        <span class="card-status-soon">Próximamente</span>
+      </div>
+      <h2 class="card-title">En el principio era el Verbo</h2>
+      <p class="card-excerpt">El prólogo joánico y su eco de Génesis 1. La teología del Logos en el mundo helenístico y su radical novedad cristiana.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Logos</span>
+          <span class="tag">Juan</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-card disabled">
+      <span class="card-bg-ref">1:1</span>
+      <div class="card-top">
+        <span class="card-ref">Hebreos · 1:1–3</span>
+        <span class="card-status-soon">Próximamente</span>
+      </div>
+      <h2 class="card-title">Heredero de todo</h2>
+      <p class="card-excerpt">La supremacía de Cristo como mediador final sobre toda revelación anterior y sustentador del universo.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Hebreos</span>
+          <span class="tag">Supremacía</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-card disabled">
+      <span class="card-bg-ref">3:16</span>
+      <div class="card-top">
+        <span class="card-ref">Juan · 3:16–17</span>
+        <span class="card-status-soon">Próximamente</span>
+      </div>
+      <h2 class="card-title">De tal manera amó Dios</h2>
+      <p class="card-excerpt">El versículo más citado de la Biblia y su profundidad teológica: amor, misión y alcance universal de la salvación.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Soteriología</span>
+          <span class="tag">Juan</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-card disabled">
+      <span class="card-bg-ref">8:1</span>
+      <div class="card-top">
+        <span class="card-ref">Romanos · 8:1–4</span>
+        <span class="card-status-soon">Próximamente</span>
+      </div>
+      <h2 class="card-title">Ninguna condenación</h2>
+      <p class="card-excerpt">La declaración más liberadora del Nuevo Testamento: el fundamento de la vida en el Espíritu y la ley de Cristo.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">Soteriología</span>
+          <span class="tag">Romanos</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ornament reveal">✦ · · ✦ · · ✦</div>
+
+</main>
+
+<footer>
+  <span class="footer-logo">Teología Logos</span>
+  <span class="footer-copy">Λ · In principio erat Verbum</span>
+</footer>
+
+<script>
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function loop(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('mouseenter',()=>{ ring.style.width='50px'; ring.style.height='50px'; });
+    a.addEventListener('mouseleave',()=>{ ring.style.width='32px'; ring.style.height='32px'; });
+  });
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{ threshold:0.1 });
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>

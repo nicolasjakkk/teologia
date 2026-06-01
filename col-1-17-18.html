@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colosenses 1:17–18 — Teología Logos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:     #1a1610;
+      --bg2:    #221e16;
+      --bg3:    #2c2619;
+      --gold:   #c8a84b;
+      --gold2:  #e8d48a;
+      --cream:  #f0ead8;
+      --muted:  #9a9080;
+      --dim:    #6b6050;
+      --border: rgba(200,168,75,0.18);
+      --serif:  'Cinzel', serif;
+      --display:'Cinzel Decorative', cursive;
+      --body:   'EB Garamond', serif;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--cream); font-family:var(--body); overflow-x:hidden; cursor:none; }
+
+    .cursor      { position:fixed; width:8px; height:8px; background:var(--gold); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--gold); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); opacity:0.4; transition:width .2s,height .2s; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3.5rem; border-bottom:1px solid var(--border); backdrop-filter:blur(16px); background:rgba(26,22,16,0.9); }
+    .nav-logo { font-family:var(--display); font-size:12px; letter-spacing:0.14em; color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:10px; }
+    .logo-mark { width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--serif); }
+    .nav-center { display:flex; list-style:none; border:1px solid var(--border); }
+    .nav-center li a { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:10px 28px; display:block; transition:color .3s,background .3s; }
+    .nav-center li a:hover { color:var(--gold); background:rgba(200,168,75,0.06); }
+    .nav-right { font-family:var(--serif); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); width:160px; text-align:right; }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 9rem 4rem 4.5rem;
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 55% 80% at 85% 50%, rgba(200,168,75,0.06) 0%, transparent 65%);
+    }
+
+    .breadcrumb { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:2rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .sep { opacity:0.35; }
+
+    .header-book-tag { font-family:var(--serif); font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; display:flex; align-items:center; gap:12px; }
+    .header-book-tag::before { content:''; display:block; width:24px; height:1px; background:var(--gold); opacity:0.5; }
+
+    .page-header h1 { font-family:var(--display); font-size:clamp(1.6rem,4vw,3.2rem); color:var(--cream); font-weight:400; margin-bottom:0.5rem; line-height:1.15; }
+    .page-header h1 span { color:var(--gold); }
+
+    .page-header .subtitle { font-family:var(--serif); font-size:clamp(0.85rem,1.5vw,1.1rem); letter-spacing:0.1em; color:var(--muted); margin-bottom:2rem; }
+
+    .header-tags { display:flex; gap:8px; flex-wrap:wrap; }
+    .htag { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); padding:5px 12px; }
+
+    /* LAYOUT */
+    .study-layout { display:grid; grid-template-columns:1fr 300px; max-width:1200px; margin:0 auto; border-bottom:1px solid var(--border); }
+
+    /* MAIN */
+    .study-main { padding:4rem 4rem 6rem; border-right:1px solid var(--border); }
+
+    /* Versículos */
+    .verse-block { background:var(--bg2); border-left:3px solid var(--gold); padding:2rem 2.5rem; margin-bottom:3.5rem; }
+    .verse-text { font-family:var(--body); font-style:italic; font-size:1.18rem; color:var(--cream); line-height:1.8; margin-bottom:0.9rem; }
+    .verse-text:last-of-type { margin-bottom:1rem; }
+    .verse-num { display:inline-block; font-family:var(--serif); font-size:9px; letter-spacing:0.2em; color:var(--gold); border:1px solid rgba(200,168,75,0.3); padding:2px 8px; margin-right:8px; vertical-align:middle; }
+    .verse-ref { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--dim); margin-top:0.6rem; }
+
+    /* Sección label */
+    .sec-title { font-family:var(--serif); font-size:10px; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:1.5rem; display:flex; align-items:center; gap:12px; }
+    .sec-title::after { content:''; flex:1; height:1px; background:rgba(200,168,75,0.14); }
+
+    /* Puntos del sermón */
+    .punto { margin-bottom:2.5rem; border:1px solid var(--border); background:var(--bg2); }
+
+    .punto-header {
+      display:flex; align-items:center; gap:1.2rem;
+      padding:1.4rem 1.6rem;
+      cursor:pointer; user-select:none;
+      transition:background 0.3s;
+    }
+    .punto-header:hover { background:rgba(200,168,75,0.04); }
+
+    .punto-num {
+      width:40px; height:40px; flex-shrink:0;
+      border:1px solid rgba(200,168,75,0.4);
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--display); font-size:0.9rem; color:var(--gold);
+      transition:background 0.3s, color 0.3s;
+    }
+    .punto.open .punto-num { background:var(--gold); color:var(--bg); border-color:var(--gold); }
+
+    .punto-info { flex:1; }
+    .punto-title { font-family:var(--serif); font-size:0.95rem; letter-spacing:0.04em; color:var(--cream); line-height:1.4; margin-bottom:0.3rem; }
+    .punto-refs { font-family:var(--serif); font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); }
+
+    .punto-chevron { font-size:0.9rem; color:var(--dim); transition:transform 0.35s; }
+    .punto.open .punto-chevron { transform:rotate(180deg); color:var(--gold); }
+
+    .punto-body { display:none; border-top:1px solid var(--border); }
+    .punto.open .punto-body { display:block; }
+    .punto-body-inner { padding:1.8rem 1.6rem; }
+
+    /* Sub-puntos */
+    .sub-label { font-family:var(--serif); font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); margin-bottom:0.8rem; }
+
+    .sub-rows { display:flex; flex-direction:column; gap:0; margin-bottom:1.8rem; }
+
+    .sub-row {
+      display:flex; align-items:center; gap:1rem;
+      padding:0.9rem 1rem;
+      border:1px solid var(--border); border-top:none;
+      cursor:pointer; transition:background 0.25s;
+    }
+    .sub-row:first-child { border-top:1px solid var(--border); }
+    .sub-row:hover { background:rgba(200,168,75,0.05); }
+
+    .sub-letter { width:28px; height:28px; border:1px solid rgba(200,168,75,0.3); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:11px; color:var(--gold); flex-shrink:0; }
+    .sub-text { flex:1; font-family:var(--body); font-size:0.93rem; color:rgba(240,234,216,0.75); line-height:1.5; }
+    .sub-arrow { color:var(--dim); font-size:1.1rem; }
+
+    /* Ideas clave */
+    .key-list { display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1.8rem; }
+    .key-item { display:flex; gap:0.8rem; align-items:flex-start; }
+    .key-dot { color:var(--gold); font-size:0.75rem; margin-top:4px; flex-shrink:0; }
+    .key-text { font-family:var(--body); font-size:0.93rem; color:rgba(240,234,216,0.7); line-height:1.6; }
+
+    /* ── MODAL ── */
+    .modal-bg {
+      position:fixed; inset:0; z-index:200;
+      background:rgba(13,11,7,0.82);
+      backdrop-filter:blur(6px);
+      display:none; align-items:flex-end; justify-content:center;
+    }
+    .modal-bg.open { display:flex; }
+
+    .modal {
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-bottom:none;
+      width:100%; max-width:720px;
+      max-height:88vh;
+      overflow-y:auto;
+      padding:2.5rem 2.5rem 3rem;
+      animation:slideUp 0.35s ease;
+    }
+
+    @keyframes slideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+    .modal-top { display:flex; align-items:flex-start; gap:1.2rem; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
+    .modal-letter { width:42px; height:42px; flex-shrink:0; border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:1rem; color:var(--gold); }
+    .modal-info { flex:1; }
+    .modal-title-text { font-family:var(--serif); font-size:1rem; letter-spacing:0.05em; color:var(--cream); margin-bottom:0.4rem; line-height:1.4; }
+    .modal-ref-tag { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); opacity:0.7; }
+    .modal-close-btn { background:none; border:1px solid var(--border); color:var(--muted); font-size:0.85rem; padding:6px 12px; cursor:pointer; font-family:var(--serif); letter-spacing:0.1em; flex-shrink:0; transition:border-color .2s, color .2s; }
+    .modal-close-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+    .modal-pts { display:flex; flex-direction:column; gap:1.2rem; margin-bottom:2rem; }
+    .modal-pt { font-family:var(--body); font-size:1rem; color:rgba(240,234,216,0.78); line-height:1.85; padding-left:1.2rem; border-left:2px solid rgba(200,168,75,0.2); }
+    .modal-pt em { font-style:italic; color:var(--gold2); }
+    .modal-pt strong { font-weight:500; color:var(--cream); }
+
+    .modal-attrs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:2rem; }
+    .modal-attr { background:var(--bg3); border:1px solid var(--border); padding:0.8rem; text-align:center; }
+    .modal-attr span { display:block; font-size:1.1rem; margin-bottom:4px; }
+    .modal-attr p { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+
+    /* SIDEBAR */
+    .study-sidebar { padding:4rem 2.5rem; }
+
+    .sidebar-block { margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid var(--border); }
+    .sidebar-block:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+
+    .sidebar-label { font-family:var(--serif); font-size:9px; letter-spacing:0.32em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; }
+
+    .par-verse { font-family:var(--body); font-style:italic; font-size:0.88rem; color:rgba(240,234,216,0.6); line-height:1.7; margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid rgba(200,168,75,0.08); }
+    .par-verse:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+    .par-verse cite { display:block; font-style:normal; font-family:var(--serif); font-size:9px; letter-spacing:0.18em; color:var(--gold); margin-top:0.5rem; text-transform:uppercase; }
+
+    .kw { padding:0.9rem 0; border-bottom:1px solid rgba(200,168,75,0.08); }
+    .kw:last-child { border-bottom:none; }
+    .kw-greek { font-family:var(--body); font-style:italic; font-size:1.05rem; color:var(--gold2); display:block; margin-bottom:2px; }
+    .kw-trans { font-family:var(--serif); font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+    .kw-def { font-family:var(--body); font-size:0.82rem; color:rgba(240,234,216,0.5); margin-top:3px; }
+
+    .topic-tag { display:inline-block; font-family:var(--serif); font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); padding:5px 10px; margin:3px 3px 3px 0; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:2.5rem 4rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-logo { font-family:var(--display); font-size:11px; letter-spacing:0.14em; color:var(--gold); }
+    .footer-copy  { font-family:var(--serif);  font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity 0.8s, transform 0.8s; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    @media (max-width:820px) {
+      .study-layout { grid-template-columns:1fr; }
+      .study-main { border-right:none; border-bottom:1px solid var(--border); padding:2.5rem 1.5rem; }
+      .study-sidebar { padding:2.5rem 1.5rem; }
+      nav { padding:1rem 1.2rem; }
+      .nav-right { display:none; }
+      .page-header { padding:7rem 1.5rem 3rem; }
+      .modal { padding:2rem 1.4rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="logo-mark">Λ</span>
+    Teología Logos
+  </a>
+  <ul class="nav-center">
+    <li><a href="estudios.html">Estudios Bíblicos</a></li>
+  </ul>
+  <div class="nav-right">In principio erat Verbum</div>
+</nav>
+
+<header class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a>
+    <span class="sep">›</span>
+    <a href="estudios.html">Estudios Bíblicos</a>
+    <span class="sep">›</span>
+    <span style="color:var(--cream);">Colosenses 1:17–18</span>
+  </div>
+  <p class="header-book-tag">Epístola · Nuevo Testamento · Colosenses</p>
+  <h1>La Preeminencia<br><span>de Cristo</span></h1>
+  <p class="subtitle">Colosenses 1 : 17 – 18</p>
+  <div class="header-tags">
+    <span class="htag">Cristología</span>
+    <span class="htag">Preeminencia</span>
+    <span class="htag">Eclesiología</span>
+    <span class="htag">Resurrección</span>
+    <span class="htag">Creación</span>
+  </div>
+</header>
+
+<div class="study-layout">
+
+  <!-- ══ COLUMNA PRINCIPAL ══ -->
+  <article class="study-main">
+
+    <!-- Versículos -->
+    <div class="verse-block reveal">
+      <p class="verse-text"><span class="verse-num">17</span>Y él es antes de todas las cosas, y todas las cosas en él subsisten.</p>
+      <p class="verse-text"><span class="verse-num">18</span>Y él es la cabeza del cuerpo que es la iglesia, él que es el principio, el primogénito de entre los muertos, para que en todo tenga la preeminencia.</p>
+      <p class="verse-ref">Colosenses 1:17–18 — Reina-Valera 1960</p>
+    </div>
+
+    <!-- ── PUNTO I ── -->
+    <div class="sec-title reveal">Puntos del estudio</div>
+
+    <div class="punto reveal" id="p0">
+      <div class="punto-header" onclick="togglePunto(0)">
+        <div class="punto-num">I</div>
+        <div class="punto-info">
+          <div class="punto-title">Él es antes de todas las cosas — Preexistencia y deidad eterna</div>
+          <div class="punto-refs">Col. 1:17a · Jn. 1:1-3 · Gén. 1:1</div>
+        </div>
+        <span class="punto-chevron">▾</span>
+      </div>
+      <div class="punto-body">
+        <div class="punto-body-inner">
+          <p class="sub-label">Sub-puntos</p>
+          <div class="sub-rows">
+            <div class="sub-row" onclick="abrirModal('p1a')">
+              <div class="sub-letter">A</div>
+              <div class="sub-text">El "Primogénito" — Preeminencia, no creación</div>
+              <span class="sub-arrow">›</span>
+            </div>
+            <div class="sub-row" onclick="abrirModal('p1b')">
+              <div class="sub-letter">B</div>
+              <div class="sub-text">Imagen del Dios Invisible — Misma Sustancia con el Padre</div>
+              <span class="sub-arrow">›</span>
+            </div>
+            <div class="sub-row" onclick="abrirModal('p1c')">
+              <div class="sub-letter">C</div>
+              <div class="sub-text">Conclusión — Fundamento de su Preeminencia</div>
+              <span class="sub-arrow">›</span>
+            </div>
+          </div>
+          <p class="sub-label">Ideas clave</p>
+          <div class="key-list">
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">"Primogénito de toda creación" = preeminencia, no primer ser creado</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">El que crea no puede ser parte de lo creado (Col. 1:16)</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">Comparte la eternidad, esencia y atributos del Padre</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PUNTO II ── -->
+    <div class="punto reveal" id="p1">
+      <div class="punto-header" onclick="togglePunto(1)">
+        <div class="punto-num">II</div>
+        <div class="punto-info">
+          <div class="punto-title">En él todas las cosas subsisten — Sustentador del universo</div>
+          <div class="punto-refs">Col. 1:17b · Heb. 1:3 · Hch. 17:28</div>
+        </div>
+        <span class="punto-chevron">▾</span>
+      </div>
+      <div class="punto-body">
+        <div class="punto-body-inner">
+          <p class="sub-label">Sub-puntos</p>
+          <div class="sub-rows">
+            <div class="sub-row" onclick="abrirModal('p2a')">
+              <div class="sub-letter">A</div>
+              <div class="sub-text">Exégesis: synístēmi — Sostener, Mantener Unido</div>
+              <span class="sub-arrow">›</span>
+            </div>
+            <div class="sub-row" onclick="abrirModal('p2b')">
+              <div class="sub-letter">B</div>
+              <div class="sub-text">Sin Cristo todo volvería al caos</div>
+              <span class="sub-arrow">›</span>
+            </div>
+          </div>
+          <p class="sub-label">Ideas clave</p>
+          <div class="key-list">
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">synístēmi: sostenimiento activo, presente y constante</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">El universo no se sostiene por leyes físicas independientes — sino por su palabra</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">"En él vivimos, nos movemos y somos" (Hch. 17:28)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PUNTO III ── -->
+    <div class="punto reveal" id="p2">
+      <div class="punto-header" onclick="togglePunto(2)">
+        <div class="punto-num">III</div>
+        <div class="punto-info">
+          <div class="punto-title">Él es la cabeza del cuerpo que es la iglesia</div>
+          <div class="punto-refs">Col. 1:18a · Ef. 1:22-23 · 1 Co. 12:27</div>
+        </div>
+        <span class="punto-chevron">▾</span>
+      </div>
+      <div class="punto-body">
+        <div class="punto-body-inner">
+          <p class="sub-label">Sub-puntos</p>
+          <div class="sub-rows">
+            <div class="sub-row" onclick="abrirModal('p3a')">
+              <div class="sub-letter">A</div>
+              <div class="sub-text">La iglesia es su cuerpo — dirección y vida</div>
+              <span class="sub-arrow">›</span>
+            </div>
+            <div class="sub-row" onclick="abrirModal('p3b')">
+              <div class="sub-letter">B</div>
+              <div class="sub-text">Ningún hombre puede ocupar ese lugar</div>
+              <span class="sub-arrow">›</span>
+            </div>
+          </div>
+          <p class="sub-label">Ideas clave</p>
+          <div class="key-list">
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">La iglesia no es una organización humana — es el cuerpo vivo de Cristo</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">Ningún pastor, apóstol ni institución puede ser cabeza de la iglesia</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">Toda estructura eclesial debe subordinarse a su señorío absoluto</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PUNTO IV ── -->
+    <div class="punto reveal" id="p3">
+      <div class="punto-header" onclick="togglePunto(3)">
+        <div class="punto-num">IV</div>
+        <div class="punto-info">
+          <div class="punto-title">Él es el primogénito de entre los muertos</div>
+          <div class="punto-refs">Col. 1:18b · Ap. 1:5 · 1 Co. 15:20-23</div>
+        </div>
+        <span class="punto-chevron">▾</span>
+      </div>
+      <div class="punto-body">
+        <div class="punto-body-inner">
+          <p class="sub-label">Sub-puntos</p>
+          <div class="sub-rows">
+            <div class="sub-row" onclick="abrirModal('p4a')">
+              <div class="sub-letter">A</div>
+              <div class="sub-text">Primogénito — supremacía y soberanía sobre la muerte</div>
+              <span class="sub-arrow">›</span>
+            </div>
+            <div class="sub-row" onclick="abrirModal('p4b')">
+              <div class="sub-letter">B</div>
+              <div class="sub-text">Su resurrección — primicias y garantía de la nuestra</div>
+              <span class="sub-arrow">›</span>
+            </div>
+          </div>
+          <p class="sub-label">Ideas clave</p>
+          <div class="key-list">
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">"Primogénito de entre los muertos" = soberanía, no cronología</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">Resucitó con cuerpo glorificado — victoria definitiva y eterna</div></div>
+            <div class="key-item"><div class="key-dot">✦</div><div class="key-text">Su resurrección garantiza la nuestra (1 Co. 15:20)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="study-sidebar">
+
+    <div class="sidebar-block reveal">
+      <p class="sidebar-label">Versículos paralelos</p>
+      <div class="par-verse">En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios. Todas las cosas por él fueron hechas.<cite>— Juan 1:1–3</cite></div>
+      <div class="par-verse">El cual, siendo el resplandor de su gloria y la imagen misma de su sustancia, sustenta todas las cosas con la palabra de su poder.<cite>— Hebreos 1:3</cite></div>
+      <div class="par-verse">En él vivimos, nos movemos y somos.<cite>— Hechos 17:28</cite></div>
+      <div class="par-verse">Dios puso todas las cosas bajo sus pies y lo dio por cabeza sobre todas las cosas a la iglesia.<cite>— Efesios 1:22</cite></div>
+      <div class="par-verse">Cristo ha resucitado de los muertos; primicias de los que durmieron es hecho.<cite>— 1 Corintios 15:20</cite></div>
+    </div>
+
+    <div class="sidebar-block reveal">
+      <p class="sidebar-label">Palabras clave en griego</p>
+      <div class="kw">
+        <span class="kw-greek">πρωτότοκος</span>
+        <span class="kw-trans">prōtótokos</span>
+        <p class="kw-def">Primogénito — preeminencia y dignidad, no origen temporal.</p>
+      </div>
+      <div class="kw">
+        <span class="kw-greek">συνέστηκεν</span>
+        <span class="kw-trans">synéstēken</span>
+        <p class="kw-def">Subsiste, cohesiona — el cosmos se sostiene activamente en él.</p>
+      </div>
+      <div class="kw">
+        <span class="kw-greek">κεφαλή</span>
+        <span class="kw-trans">kephalḗ</span>
+        <p class="kw-def">Cabeza — autoridad, fuente y gobierno sobre la iglesia.</p>
+      </div>
+      <div class="kw">
+        <span class="kw-greek">πρωτεύων</span>
+        <span class="kw-trans">prōteúōn</span>
+        <p class="kw-def">Teniendo la preeminencia — primacía absoluta en todo.</p>
+      </div>
+    </div>
+
+    <div class="sidebar-block reveal">
+      <p class="sidebar-label">Temas doctrinales</p>
+      <span class="topic-tag">Cristología</span>
+      <span class="topic-tag">Eclesiología</span>
+      <span class="topic-tag">Creación</span>
+      <span class="topic-tag">Resurrección</span>
+      <span class="topic-tag">Preeminencia</span>
+      <span class="topic-tag">Encarnación</span>
+      <span class="topic-tag">Soteriología</span>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-bg" id="modal-bg" onclick="cerrarFondo(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-letter" id="m-letra"></div>
+      <div class="modal-info">
+        <div class="modal-title-text" id="m-titulo"></div>
+        <div class="modal-ref-tag" id="m-ref"></div>
+      </div>
+      <button class="modal-close-btn" onclick="cerrarModal()">✕ Cerrar</button>
+    </div>
+    <div id="m-cuerpo"></div>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-logo">Teología Logos</span>
+  <span class="footer-copy">Λ · In principio erat Verbum</span>
+</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'), ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a').forEach(a=>{a.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';});a.addEventListener('mouseleave',()=>{ring.style.width='32px';ring.style.height='32px';});});
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Acordeón puntos
+function togglePunto(i){
+  const el=document.getElementById('p'+i);
+  const abierto=el.classList.contains('open');
+  [0,1,2,3].forEach(j=>document.getElementById('p'+j).classList.remove('open'));
+  if(!abierto) el.classList.add('open');
+}
+
+// Datos del modal
+const MD={
+  p1a:{letra:'A',titulo:'El "Primogénito" — Preeminencia, no creación',ref:'Gén. 1:1 · Jn. 1:1-3 · Col. 1:15-16',pts:[
+    '<strong>Gén. 1:1 — "En el principio creó Dios los cielos y la tierra."</strong> Ese "principio" no es el principio de Dios — es el principio de la creación. Dios ya existía antes.',
+    '<strong>Jn. 1:1-3 lo confirma:</strong> <em>"En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios. Todas las cosas por él fueron hechas."</em> Cristo ya estaba allí, y era Dios.',
+    'Col. 1:15 lo llama <em>"primogénito de toda creación"</em> — no el primero en ser creado, sino el que tiene la <strong>preeminencia</strong> sobre toda la creación.',
+    'Cristo no es parte de la creación. <em>"Por él y para él fueron creadas todas las cosas"</em> (v.16). El que crea no puede ser parte de lo creado.'
+  ]},
+  p1b:{letra:'B',titulo:'Imagen del Dios Invisible — Misma Sustancia con el Padre',ref:'Col. 1:15 · Heb. 1:3',pts:[
+    '<em>"Imagen del Dios invisible"</em> — no una copia externa, sino la expresión perfecta y exacta del Padre. Heb. 1:3: <em>"el resplandor de su gloria y la imagen misma de su sustancia."</em>',
+    'Ser imagen del Dios invisible implica compartir su misma esencia. Lo que el Padre es en su naturaleza, el Hijo también lo es. Son de la misma sustancia.',
+    'Todos los atributos del Padre pertenecen igualmente al Hijo: si el Padre es eterno, todopoderoso, Señor, increado, infinito y Dios — lo mismo es el Hijo.'
+  ],attrs:true},
+  p1c:{letra:'C',titulo:'Conclusión — Fundamento de su Preeminencia',ref:'Col. 1:17a',pts:[
+    'Cristo es antes de todas las cosas porque comparte la eternidad del Padre — no tuvo origen, no fue creado, no comenzó. Siempre fue.',
+    'Esta verdad fundamenta su derecho a la preeminencia en todo: en la creación, en la iglesia y en nuestra vida personal.',
+    'No reconocer su preeminencia no es solo un error doctrinal — es negar su naturaleza divina y eterna.'
+  ]},
+  p2a:{letra:'A',titulo:'Exégesis: synístēmi — Sostener, Mantener Unido',ref:'Col. 1:17b · griego: συνίστημι',pts:[
+    '<strong>La palabra griega es <em>synístēmi</em> (συνίστημι).</strong> Significa <em>mantener unido, sostener, preservar, hacer que algo continúe existiendo.</em> Es una acción continua y activa.',
+    'Pablo no dice que Cristo creó todas las cosas y luego se retiró. Dice que todas las cosas <strong>subsisten en él ahora mismo</strong> — sostenimiento presente, constante e imprescindible.',
+    'Cristo no solo es la <strong>causa y el inicio</strong> de todas las cosas, sino también quien hace que todo <strong>siga existiendo</strong> en este preciso momento.'
+  ]},
+  p2b:{letra:'B',titulo:'Sin Cristo Todo Volvería al Caos',ref:'Gén. 1:2 · Heb. 1:3 · Hch. 17:28',pts:[
+    'Si Cristo dejara de sostener todas las cosas, nada subsistiría. Todo volvería a ser <strong>caos, desorden, vacío, sin vida</strong> — como describe Gén. 1:2 antes de que Dios actuara.',
+    'Heb. 1:3: Cristo está <em>"sustentando todas las cosas con la palabra de su poder."</em> El universo no se sostiene por leyes físicas independientes — se sostiene por su palabra activa.',
+    '<em>"En él vivimos, nos movemos y somos"</em> (Hch. 17:28). Cada aliento y cada amanecer es evidencia de que Cristo sigue sustentando su creación.'
+  ]},
+  p3a:{letra:'A',titulo:'La Iglesia es su Cuerpo — Dirección y Vida',ref:'Col. 1:18a · Ef. 1:22-23',pts:[
+    'La iglesia no es una organización humana — es el <strong>cuerpo de Cristo</strong>, y él es su cabeza. La dirección, la vida y la unidad vienen exclusivamente de él.',
+    'Así como la cabeza dirige al cuerpo, Cristo dirige a su iglesia. Nada en la iglesia debe hacerse al margen de su señorío.',
+    'Ef. 1:22-23: Dios puso todas las cosas bajo sus pies y lo dio por cabeza sobre todas las cosas a la iglesia.'
+  ]},
+  p3b:{letra:'B',titulo:'Ningún Hombre Puede Ocupar ese Lugar',ref:'1 Co. 12:27 · Mt. 16:18',pts:[
+    'Ningún pastor, apóstol, institución ni tradición puede ser la cabeza de la iglesia. Ese lugar le pertenece exclusivamente a Cristo.',
+    'Cuando cualquier autoridad humana desplaza a Cristo como cabeza, la iglesia pierde su identidad, su poder y su propósito.',
+    'Toda estructura, liderazgo y decisión eclesial debe estar subordinada a su señorío absoluto.'
+  ]},
+  p4a:{letra:'A',titulo:'Primogénito — Supremacía Sobre la Muerte',ref:'Col. 1:18b · Ap. 1:5',pts:[
+    '<em>"Primogénito de entre los muertos"</em> — de nuevo, no cronología sino <strong>preeminencia</strong>: es el soberano sobre la muerte y la resurrección.',
+    'Ap. 1:5 lo llama <em>"el primogénito de los muertos y el soberano de los reyes de la tierra."</em> Su resurrección es un acto de soberanía, no solo de victoria.',
+    'Él no resucitó como Lázaro, que volvió a morir. Resucitó con cuerpo glorificado, venciendo la muerte de forma definitiva y eterna.'
+  ]},
+  p4b:{letra:'B',titulo:'Su Resurrección — Garantía de la Nuestra',ref:'1 Co. 15:20-23',pts:[
+    '1 Co. 15:20: <em>"Cristo ha resucitado de los muertos; primicias de los que durmieron es hecho."</em> Su resurrección garantiza y anticipa la nuestra.',
+    'Por eso en todo — creación, iglesia y redención — tiene la preeminencia. Es el primero y el supremo en cada dimensión de la existencia.',
+    'La respuesta a la preeminencia de Cristo no es solo admirarla — es someterse a ella en toda área de nuestra vida.'
+  ]}
+};
+
+function abrirModal(id){
+  const m=MD[id]; if(!m) return;
+  document.getElementById('m-letra').textContent=m.letra;
+  document.getElementById('m-titulo').textContent=m.titulo;
+  document.getElementById('m-ref').textContent=m.ref;
+
+  let html='<div class="modal-pts">';
+  m.pts.forEach(p=>{ html+=`<div class="modal-pt">${p}</div>`; });
+  html+='</div>';
+
+  if(m.attrs){
+    html+=`<div class="modal-attrs">
+      <div class="modal-attr"><span>∞</span><p>Eterno</p></div>
+      <div class="modal-attr"><span>⚡</span><p>Todopoderoso</p></div>
+      <div class="modal-attr"><span>👑</span><p>Señor</p></div>
+      <div class="modal-attr"><span>✨</span><p>Increado</p></div>
+      <div class="modal-attr"><span>🌐</span><p>Infinito</p></div>
+      <div class="modal-attr"><span>☩</span><p>Dios</p></div>
+    </div>`;
+  }
+
+  document.getElementById('m-cuerpo').innerHTML=html;
+  document.getElementById('modal-bg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function cerrarModal(){
+  document.getElementById('modal-bg').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function cerrarFondo(e){
+  if(e.target===document.getElementById('modal-bg')) cerrarModal();
+}
+</script>
+</body>
+</html>
