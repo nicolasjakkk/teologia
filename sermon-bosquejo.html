@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>La Preeminencia de Cristo</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-deep:  #2d1b69;
+    --purple-mid:   #4c2f9e;
+    --purple-vivid: #7c3aed;
+    --purple-soft:  #a78bfa;
+    --purple-pale:  #ede9fe;
+    --purple-ghost: #f5f3ff;
+    --white:        #ffffff;
+    --ink:          #1a0f3c;
+    --ink-mid:      #3d2e6b;
+    --ink-soft:     #6b5ca5;
+    --text-body:    #2e1f5e;
+    --text-muted:   #7c6faa;
+    --accent:       #06b6d4;
+    --accent-warm:  #f59e0b;
+    --card-bg:      #ffffff;
+    --surface:      #f5f3ff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body {
+    background: var(--purple-ghost);
+    color: var(--text-body);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(145deg, var(--purple-deep) 0%, var(--purple-mid) 55%, #6d28d9 100%);
+    padding: 3rem 1.4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(124,58,237,0.35);
+    filter: blur(50px);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(6,182,212,0.2);
+    filter: blur(40px);
+  }
+
+  .header-inner { position:relative; z-index:1; }
+
+  .header-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 1.2rem;
+  }
+  .header-chip span { width:6px; height:6px; border-radius:50%; background:var(--accent); display:inline-block; }
+
+  .header h1 {
+    font-size: clamp(1.9rem, 7vw, 2.8rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+  .header h1 em { color: var(--purple-soft); font-style: normal; }
+
+  .header-ref {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.4rem;
+  }
+
+  .verse-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+    backdrop-filter: blur(10px);
+  }
+  .verse-card p {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.93rem;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.7;
+  }
+
+  /* ── PROGRESS ── */
+  .prog-section {
+    background: var(--card-bg);
+    margin: 1.2rem 1.2rem 0;
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 2px 12px rgba(45,27,105,0.08);
+  }
+  .prog-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; }
+  .prog-label { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); }
+  .prog-count { font-size:0.75rem; font-weight:800; color:var(--purple-vivid); }
+  .prog-track { height:6px; background:var(--purple-pale); border-radius:100px; overflow:hidden; }
+  .prog-fill {
+    height:100%;
+    background: linear-gradient(90deg, var(--purple-vivid), var(--purple-soft));
+    border-radius:100px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width:0%;
+  }
+
+  /* ── CARDS ── */
+  .cards { padding: 1rem 1.2rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 16px rgba(45,27,105,0.08);
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card.expanded {
+    border-color: var(--purple-vivid);
+    box-shadow: 0 8px 32px rgba(124,58,237,0.18);
+  }
+  .card.done {
+    border-color: #86efac;
+    background: #f0fdf4;
+  }
+  .card.done .num-badge { background: #16a34a; }
+  .card.done .card-title { color: #166534; }
+  .card.done .done-check { opacity:1; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.3rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .num-badge {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple-vivid), var(--purple-mid));
+    display: flex; align-items:center; justify-content:center;
+    font-size: 0.85rem; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(124,58,237,0.35);
+    transition: all 0.3s;
+  }
+  .card.expanded .num-badge {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    box-shadow: 0 4px 12px rgba(6,182,212,0.35);
+  }
+
+  .card-info { flex:1; min-width:0; }
+  .card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .card-refs {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    font-family: 'Lora', serif;
+    font-style: italic;
+  }
+
+  .done-check { opacity:0; color:#16a34a; font-size:1.1rem; transition:opacity 0.3s; flex-shrink:0; }
+  .chevron { color:var(--purple-soft); font-size:0.8rem; transition:transform 0.3s; flex-shrink:0; }
+  .card.expanded .chevron { transform:rotate(180deg); }
+
+  /* ── CARD BODY ── */
+  .card-body { overflow:hidden; max-height:0; transition:max-height 0.45s cubic-bezier(.4,0,.2,1); }
+  .card.expanded .card-body { max-height:1200px; }
+
+  .card-body-inner {
+    border-top: 1px solid var(--purple-pale);
+    padding: 1.2rem 1.3rem 1.3rem;
+    display: flex; flex-direction:column; gap:1rem;
+  }
+
+  /* sec label */
+  .sec-label {
+    font-size: 0.62rem; font-weight: 700; letter-spacing:0.15em;
+    text-transform: uppercase; color: var(--text-muted);
+    display: flex; align-items:center; gap:0.5rem;
+  }
+  .sec-label::after { content:''; flex:1; height:1px; background:var(--purple-pale); }
+
+  /* sub rows */
+  .sub-rows { display:flex; flex-direction:column; gap:0.5rem; }
+
+  .sub-row {
+    display: flex; align-items:center; gap:0.85rem;
+    background: var(--surface);
+    border: 1.5px solid var(--purple-pale);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sub-row:active, .sub-row:hover {
+    background: var(--purple-pale);
+    border-color: var(--purple-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124,58,237,0.12);
+  }
+
+  .sub-letter {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink:0;
+    background: linear-gradient(135deg, var(--purple-vivid), var(--purple-mid));
+    display: flex; align-items:center; justify-content:center;
+    font-size: 0.7rem; font-weight: 800; color: #fff;
+  }
+  .sub-text { flex:1; font-size:0.8rem; font-weight:600; color:var(--ink-mid); line-height:1.35; }
+  .sub-arrow { color: var(--purple-soft); font-size:1rem; flex-shrink:0; font-weight:700; }
+
+  /* key ideas */
+  .key-list { display:flex; flex-direction:column; gap:0.45rem; }
+  .key-item {
+    display: flex; gap:0.7rem; align-items:flex-start;
+    font-size: 0.88rem; color: var(--text-body); line-height:1.55;
+  }
+  .key-dot {
+    width: 20px; height: 20px; border-radius:6px; flex-shrink:0; margin-top:0.1rem;
+    background: var(--purple-pale);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 0.55rem; color: var(--purple-vivid);
+  }
+
+  /* attr grid */
+  .attr-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; }
+  .attr-item {
+    background: linear-gradient(135deg, var(--purple-pale), #fff);
+    border: 1.5px solid var(--purple-pale);
+    border-radius: 12px; padding: 0.7rem 0.5rem;
+    display:flex; flex-direction:column; align-items:center; gap:0.3rem;
+    font-size: 0.68rem; font-weight: 700; color: var(--purple-mid); text-align:center;
+  }
+  .attr-icon { font-size: 1.2rem; }
+
+  /* btn done */
+  .btn-done {
+    width:100%;
+    background: linear-gradient(135deg, var(--purple-vivid), var(--purple-mid));
+    border: none; border-radius: 12px;
+    color: #fff; font-family:'Plus Jakarta Sans',sans-serif;
+    font-size: 0.75rem; font-weight: 700; letter-spacing:0.05em;
+    padding: 0.85rem; cursor:pointer;
+    box-shadow: 0 4px 14px rgba(124,58,237,0.3);
+    transition: all 0.2s;
+  }
+  .btn-done:active { transform:scale(0.98); }
+  .card.done .btn-done {
+    background: linear-gradient(135deg,#16a34a,#15803d);
+    box-shadow: 0 4px 14px rgba(22,163,74,0.3);
+  }
+
+  /* ── FOOTER ── */
+  .footer { text-align:center; padding: 0 1.4rem 3.5rem; }
+  .btn-reset {
+    background: transparent;
+    border: 1.5px solid var(--purple-pale);
+    color: var(--text-muted);
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size: 0.7rem; font-weight:600;
+    padding: 0.7rem 2rem; border-radius:100px; cursor:pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover { border-color:var(--purple-soft); color:var(--purple-vivid); }
+
+  /* ── MODAL ── */
+  .modal-backdrop {
+    display:none; position:fixed; inset:0;
+    background: rgba(20,10,50,0.65);
+    z-index:200; backdrop-filter:blur(6px);
+    align-items:flex-end; justify-content:center;
+  }
+  .modal-backdrop.open { display:flex; }
+
+  .modal {
+    background: #fff;
+    border-radius: 28px 28px 0 0;
+    width:100%; max-width:600px;
+    max-height: 90vh; overflow-y:auto;
+    animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  .modal-handle { width:44px; height:5px; background:var(--purple-pale); border-radius:100px; margin:1rem auto 0; }
+
+  .modal-header {
+    padding: 1.3rem 1.4rem 1rem;
+    border-bottom: 1px solid var(--purple-pale);
+    display:flex; align-items:flex-start; gap:0.9rem;
+  }
+  .modal-num {
+    width: 38px; height:38px; border-radius:10px; flex-shrink:0;
+    background: linear-gradient(135deg, var(--purple-vivid), var(--purple-mid));
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.82rem; font-weight:800; color:#fff;
+    box-shadow: 0 4px 10px rgba(124,58,237,0.3);
+  }
+  .modal-title {
+    flex:1;
+    font-size: 1rem; font-weight: 700; color:var(--ink);
+    line-height: 1.3;
+  }
+  .modal-close {
+    width:32px; height:32px; border-radius:50%; flex-shrink:0;
+    background:var(--surface); border:1.5px solid var(--purple-pale);
+    color:var(--text-muted); font-size:0.9rem;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+
+  .modal-body { padding:1.2rem 1.4rem 2.5rem; display:flex; flex-direction:column; gap:0.9rem; }
+
+  .modal-ref-chip {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    background: var(--purple-pale); border-radius:100px;
+    padding:0.25rem 0.8rem;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--purple-vivid);
+    align-self:flex-start;
+  }
+
+  .modal-pts { display:flex; flex-direction:column; gap:0.75rem; }
+
+  .modal-pt {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    border-left: 3px solid var(--purple-vivid);
+    font-family: 'Lora', serif;
+    font-size: 0.97rem; line-height:1.7; color:var(--text-body);
+  }
+  .modal-pt em { color:var(--purple-vivid); font-style:italic; }
+  .modal-pt strong { color:var(--ink); font-style:normal; font-family:'Plus Jakarta Sans',sans-serif; }
+
+  .modal-attrs { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; }
+  .modal-attr {
+    background: linear-gradient(135deg, var(--purple-pale), #fff);
+    border:1.5px solid var(--purple-pale); border-radius:12px;
+    padding:0.7rem 0.4rem;
+    display:flex; flex-direction:column; align-items:center; gap:0.3rem;
+    font-size:0.68rem; font-weight:700; color:var(--purple-mid); text-align:center;
+  }
+  .modal-attr span { font-size:1.2rem; }
+
+  .notes-section { display:flex; flex-direction:column; gap:0.4rem; }
+  .notes-lbl { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); }
+  .notes-ta {
+    width:100%; min-height:80px;
+    background:var(--surface); border:1.5px solid var(--purple-pale);
+    border-radius:12px; color:var(--text-body);
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:0.9rem;
+    padding:0.85rem; resize:none; outline:none; transition:border-color 0.2s;
+  }
+  .notes-ta::placeholder { color:var(--text-muted); opacity:0.6; }
+  .notes-ta:focus { border-color:var(--purple-soft); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-chip"><span></span> Bosquejo del Sermón</div>
+    <h1>La <em>Preeminencia</em><br>de Cristo</h1>
+    <div class="header-ref">Colosenses 1:17–18</div>
+    <div class="verse-card">
+      <p>"Y él es antes de todas las cosas, y todas las cosas en él subsisten; y él es la cabeza del cuerpo que es la iglesia, él que es el principio, el primogénito de entre los muertos, para que en todo tenga la preeminencia."</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-section">
+  <div class="prog-row">
+    <span class="prog-label">Progreso</span>
+    <span class="prog-count" id="progCount">0 / 4 puntos</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+  <!-- I -->
+  <div class="card" id="card-0">
+    <div class="card-header" onclick="toggleCard(0)">
+      <div class="num-badge">I</div>
+      <div class="card-info">
+        <div class="card-title">Él es antes de todas las cosas</div>
+        <div class="card-refs">Col. 1:15-17 · Gén. 1:1 · Jn. 1:1-3 · Heb. 1:3</div>
+      </div>
+      <span class="done-check">✓</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="card-body-inner">
+        <div class="sec-label">Sub-puntos</div>
+        <div class="sub-rows">
+          <div class="sub-row" onclick="openModal('p1a')">
+            <div class="sub-letter">A</div>
+            <div class="sub-text">El "Primogénito" — preeminencia, no creación</div>
+            <span class="sub-arrow">›</span>
+          </div>
+          <div class="sub-row" onclick="openModal('p1b')">
+            <div class="sub-letter">B</div>
+            <div class="sub-text">Imagen del Dios invisible — misma sustancia con el Padre</div>
+            <span class="sub-arrow">›</span>
+          </div>
+          <div class="sub-row" onclick="openModal('p1c')">
+            <div class="sub-letter">C</div>
+            <div class="sub-text">Conclusión — fundamento de su preeminencia</div>
+            <span class="sub-arrow">›</span>
+          </div>
+        </div>
+
+        <div class="sec-label">Ideas clave</div>
+        <div class="key-list">
+          <div class="key-item"><div class="key-dot">✦</div>Gén. 1:1 → Jn. 1:1 → Col. 1:15: el mismo "principio" — Cristo ya existía y era Dios</div>
+          <div class="key-item"><div class="key-dot">✦</div>"Primogénito" = preeminencia sobre la creación, no primera criatura</div>
+          <div class="key-item"><div class="key-dot">✦</div>Comparte la misma esencia y todos los atributos del Padre</div>
+        </div>
+
+        <div class="attr-grid">
+          <div class="attr-item"><span class="attr-icon">∞</span>Eterno</div>
+          <div class="attr-item"><span class="attr-icon">⚡</span>Todopoderoso</div>
+          <div class="attr-item"><span class="attr-icon">👑</span>Señor</div>
+          <div class="attr-item"><span class="attr-icon">✨</span>Increado</div>
+          <div class="attr-item"><span class="attr-icon">🌐</span>Infinito</div>
+          <div class="attr-item"><span class="attr-icon">☩</span>Dios</div>
+        </div>
+
+        <button class="btn-done" onclick="markDone(0,event)">Marcar como predicado</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- II -->
+  <div class="card" id="card-1">
+    <div class="card-header" onclick="toggleCard(1)">
+      <div class="num-badge">II</div>
+      <div class="card-info">
+        <div class="card-title">Todas las cosas en él subsisten</div>
+        <div class="card-refs">Col. 1:17b · Heb. 1:3 · Hch. 17:28 · Gén. 1:2</div>
+      </div>
+      <span class="done-check">✓</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="card-body-inner">
+        <div class="sec-label">Sub-puntos</div>
+        <div class="sub-rows">
+          <div class="sub-row" onclick="openModal('p2a')">
+            <div class="sub-letter">A</div>
+            <div class="sub-text">Exégesis: synístēmi — mantener unido, sostener, preservar</div>
+            <span class="sub-arrow">›</span>
+          </div>
+          <div class="sub-row" onclick="openModal('p2b')">
+            <div class="sub-letter">B</div>
+            <div class="sub-text">Sin Cristo todo volvería al caos y al vacío</div>
+            <span class="sub-arrow">›</span>
+          </div>
+        </div>
+
+        <div class="sec-label">Ideas clave</div>
+        <div class="key-list">
+          <div class="key-item"><div class="key-dot">✦</div><em>Synístēmi</em>: acción continua y activa — sostenimiento presente, no pasado</div>
+          <div class="key-item"><div class="key-dot">✦</div>Cristo no solo inició la creación — la sustenta ahora mismo</div>
+          <div class="key-item"><div class="key-dot">✦</div>Sin su sustento: caos, desorden, vacío — como Gén. 1:2</div>
+        </div>
+
+        <button class="btn-done" onclick="markDone(1,event)">Marcar como predicado</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- III -->
+  <div class="card" id="card-2">
+    <div class="card-header" onclick="toggleCard(2)">
+      <div class="num-badge">III</div>
+      <div class="card-info">
+        <div class="card-title">Él es la cabeza de la iglesia</div>
+        <div class="card-refs">Col. 1:18a · Ef. 1:22-23 · 1 Co. 12:27</div>
+      </div>
+      <span class="done-check">✓</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="card-body-inner">
+        <div class="sec-label">Sub-puntos</div>
+        <div class="sub-rows">
+          <div class="sub-row" onclick="openModal('p3a')">
+            <div class="sub-letter">A</div>
+            <div class="sub-text">La iglesia es su cuerpo — dirección y vida vienen de él</div>
+            <span class="sub-arrow">›</span>
+          </div>
+          <div class="sub-row" onclick="openModal('p3b')">
+            <div class="sub-letter">B</div>
+            <div class="sub-text">Ningún hombre puede ocupar ese lugar</div>
+            <span class="sub-arrow">›</span>
+          </div>
+        </div>
+
+        <div class="sec-label">Ideas clave</div>
+        <div class="key-list">
+          <div class="key-item"><div class="key-dot">✦</div>La iglesia es cuerpo — Cristo es la cabeza que dirige y da vida</div>
+          <div class="key-item"><div class="key-dot">✦</div>Ningún pastor, institución ni tradición puede reemplazarlo</div>
+          <div class="key-item"><div class="key-dot">✦</div>Todo liderazgo eclesial debe estar bajo su señorío absoluto</div>
+        </div>
+
+        <button class="btn-done" onclick="markDone(2,event)">Marcar como predicado</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IV -->
+  <div class="card" id="card-3">
+    <div class="card-header" onclick="toggleCard(3)">
+      <div class="num-badge">IV</div>
+      <div class="card-info">
+        <div class="card-title">Él es el primogénito de entre los muertos</div>
+        <div class="card-refs">Col. 1:18b · Ap. 1:5 · 1 Co. 15:20-23</div>
+      </div>
+      <span class="done-check">✓</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="card-body-inner">
+        <div class="sec-label">Sub-puntos</div>
+        <div class="sub-rows">
+          <div class="sub-row" onclick="openModal('p4a')">
+            <div class="sub-letter">A</div>
+            <div class="sub-text">Primogénito — supremacía y soberanía sobre la muerte</div>
+            <span class="sub-arrow">›</span>
+          </div>
+          <div class="sub-row" onclick="openModal('p4b')">
+            <div class="sub-letter">B</div>
+            <div class="sub-text">Su resurrección — primicias y garantía de la nuestra</div>
+            <span class="sub-arrow">›</span>
+          </div>
+        </div>
+
+        <div class="sec-label">Ideas clave</div>
+        <div class="key-list">
+          <div class="key-item"><div class="key-dot">✦</div>"Primogénito de entre los muertos" = soberanía, no cronología</div>
+          <div class="key-item"><div class="key-dot">✦</div>Resucitó con cuerpo glorificado — victoria definitiva y eterna</div>
+          <div class="key-item"><div class="key-dot">✦</div>Su resurrección garantiza la nuestra (1 Co. 15:20)</div>
+        </div>
+
+        <button class="btn-done" onclick="markDone(3,event)">Marcar como predicado</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <button class="btn-reset" onclick="resetAll()">↺ Reiniciar bosquejo</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeBackdrop(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-num" id="modal-num">A</div>
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const state = { done:[false,false,false,false] };
+
+function toggleCard(i) {
+  const card = document.getElementById('card-'+i);
+  const open = card.classList.contains('expanded');
+  [0,1,2,3].forEach(j => document.getElementById('card-'+j).classList.remove('expanded'));
+  if (!open) card.classList.add('expanded');
+}
+
+function markDone(i,e) {
+  e.stopPropagation();
+  state.done[i] = !state.done[i];
+  const card = document.getElementById('card-'+i);
+  card.classList.toggle('done', state.done[i]);
+  card.querySelector('.btn-done').textContent = state.done[i] ? '✓ ¡Predicado!' : 'Marcar como predicado';
+  updateProgress();
+}
+
+function updateProgress() {
+  const n = state.done.filter(Boolean).length;
+  document.getElementById('progFill').style.width = (n/4*100)+'%';
+  document.getElementById('progCount').textContent = n+' / 4 puntos';
+}
+
+function resetAll() {
+  state.done = [false,false,false,false];
+  [0,1,2,3].forEach(i => {
+    const c = document.getElementById('card-'+i);
+    c.classList.remove('done','expanded');
+    c.querySelector('.btn-done').textContent = 'Marcar como predicado';
+  });
+  updateProgress();
+}
+
+// MODAL DATA
+const MD = {
+  p1a:{num:'A',title:'El "Primogénito" — Preeminencia, no creación',ref:'Gén. 1:1 · Jn. 1:1-3 · Col. 1:15-16',pts:[
+    '<strong>Gén. 1:1 — "En el principio creó Dios los cielos y la tierra."</strong> La tierra estaba desordenada y vacía. Ese "principio" no es el principio de Dios — es el principio de la creación. Dios ya existía antes.',
+    '<strong>Jn. 1:1-3 lo confirma:</strong> <em>"En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios. Todas las cosas por él fueron hechas."</em> El mismo "principio" de Génesis — Cristo ya estaba allí, y era Dios.',
+    'Col. 1:15 lo llama <em>"primogénito de toda creación"</em> — no el primero en ser creado, sino el que tiene la <strong>preeminencia</strong> sobre toda la creación.',
+    'Cristo no es parte de la creación. <em>"Por él y para él fueron creadas todas las cosas"</em> (v.16). El que crea no puede ser parte de lo creado.'
+  ],key:'n-p1a'},
+  p1b:{num:'B',title:'Imagen del Dios Invisible — Misma Sustancia con el Padre',ref:'Col. 1:15 · Heb. 1:3',pts:[
+    '<em>"Imagen del Dios invisible"</em> — no una copia externa, sino la expresión perfecta y exacta del Padre. Heb. 1:3: <em>"el resplandor de su gloria y la imagen misma de su sustancia."</em>',
+    'Ser imagen del Dios invisible implica compartir su misma esencia. Lo que el Padre es en su naturaleza, el Hijo también lo es. Son de la misma sustancia.',
+    'Por tanto, todos los atributos del Padre pertenecen igualmente al Hijo y al Espíritu Santo: si el Padre es eterno, todopoderoso, Señor, increado, infinito y Dios — lo mismo es el Hijo.'
+  ],extra:'attrs',key:'n-p1b'},
+  p1c:{num:'C',title:'Conclusión — Fundamento de su Preeminencia',ref:'Col. 1:17a',pts:[
+    'Cristo es antes de todas las cosas porque comparte la eternidad del Padre — no tuvo origen, no fue creado, no comenzó. Siempre fue.',
+    'Esta verdad fundamenta su derecho a la preeminencia en todo: en la creación, en la iglesia y en nuestra vida personal.',
+    'No reconocer su preeminencia no es solo un error doctrinal — es negar su naturaleza divina y eterna.'
+  ],key:'n-p1c'},
+  p2a:{num:'A',title:'Exégesis: synístēmi — Sostener, Mantener Unido',ref:'Col. 1:17b · griego: συνίστημι',pts:[
+    '<strong>La palabra griega es <em>synístēmi</em> (συνίστημι).</strong> No es una palabra pasiva — significa <em>mantener unido, sostener, preservar, hacer que algo continúe existiendo.</em> Es una acción continua y activa.',
+    'Pablo no dice que Cristo creó todas las cosas y luego se retiró. Dice que todas las cosas <strong>subsisten en él ahora mismo</strong> — sostenimiento presente, constante e imprescindible.',
+    'Cristo no solo es la <strong>causa y el inicio</strong> de todas las cosas, sino también quien hace que todo <strong>siga existiendo</strong> en este preciso momento.'
+  ],key:'n-p2a'},
+  p2b:{num:'B',title:'Sin Cristo Todo Volvería al Caos',ref:'Gén. 1:2 · Heb. 1:3 · Hch. 17:28',pts:[
+    'Si Cristo dejara de sostener todas las cosas, nada subsistiría. Todo volvería a ser <strong>caos, desorden, vacío, sin vida</strong> — como describe Gén. 1:2 antes de que Dios actuara.',
+    'Heb. 1:3: Cristo está <em>"sustentando todas las cosas con la palabra de su poder."</em> El universo no se sostiene por leyes físicas independientes — se sostiene por su palabra activa.',
+    '<em>"En él vivimos, nos movemos y somos"</em> (Hch. 17:28). Cada aliento y cada amanecer es evidencia de que Cristo sigue sustentando su creación.'
+  ],key:'n-p2b'},
+  p3a:{num:'A',title:'La Iglesia es su Cuerpo — Dirección y Vida',ref:'Col. 1:18a · Ef. 1:22-23',pts:[
+    'La iglesia no es una organización humana — es el <strong>cuerpo de Cristo</strong>, y él es su cabeza. La dirección, la vida y la unidad vienen exclusivamente de él.',
+    'Así como la cabeza dirige al cuerpo, Cristo dirige a su iglesia. Nada en la iglesia debe hacerse al margen de su señorío.',
+    'Ef. 1:22-23: Dios puso todas las cosas bajo sus pies y lo dio por cabeza sobre todas las cosas a la iglesia.'
+  ],key:'n-p3a'},
+  p3b:{num:'B',title:'Ningún Hombre Puede Ocupar ese Lugar',ref:'1 Co. 12:27 · Mt. 16:18',pts:[
+    'Ningún pastor, apóstol, institución ni tradición puede ser la cabeza de la iglesia. Ese lugar le pertenece exclusivamente a Cristo.',
+    'Cuando cualquier autoridad humana desplaza a Cristo como cabeza, la iglesia pierde su identidad, su poder y su propósito.',
+    'Toda estructura, liderazgo y decisión eclesial debe estar subordinada a su señorío absoluto.'
+  ],key:'n-p3b'},
+  p4a:{num:'A',title:'Primogénito — Supremacía Sobre la Muerte',ref:'Col. 1:18b · Ap. 1:5',pts:[
+    '<em>"Primogénito de entre los muertos"</em> — de nuevo, no cronología sino <strong>preeminencia</strong>: es el soberano sobre la muerte y la resurrección.',
+    'Ap. 1:5 lo llama <em>"el primogénito de los muertos y el soberano de los reyes de la tierra."</em> Su resurrección es un acto de soberanía, no solo de victoria.',
+    'Él no resucitó como Lázaro, que volvió a morir. Resucitó con cuerpo glorificado, venciendo la muerte de forma definitiva y eterna.'
+  ],key:'n-p4a'},
+  p4b:{num:'B',title:'Su Resurrección — Garantía de la Nuestra',ref:'1 Co. 15:20-23',pts:[
+    '1 Co. 15:20: <em>"Cristo ha resucitado de los muertos; primicias de los que durmieron es hecho."</em> Su resurrección garantiza y anticipa la nuestra.',
+    'Por eso en todo — creación, iglesia y redención — tiene la preeminencia. Es el primero y el supremo en cada dimensión de la existencia.',
+    'La respuesta a la preeminencia de Cristo no es solo admirarla — es someterse a ella en toda área de nuestra vida.'
+  ],key:'n-p4b'}
+};
+
+let curKey = null;
+
+function openModal(id) {
+  const m = MD[id]; if (!m) return;
+  curKey = m.key;
+  document.getElementById('modal-num').textContent = m.num;
+  document.getElementById('modal-title').textContent = m.title;
+
+  let html = `<div class="modal-ref-chip">📖 ${m.ref}</div>`;
+  html += '<div class="modal-pts">';
+  m.pts.forEach(p => { html += `<div class="modal-pt">${p}</div>`; });
+  html += '</div>';
+
+  if (m.extra === 'attrs') {
+    html += `<div class="modal-attrs">
+      <div class="modal-attr"><span>∞</span>Eterno</div>
+      <div class="modal-attr"><span>⚡</span>Todopoderoso</div>
+      <div class="modal-attr"><span>👑</span>Señor</div>
+      <div class="modal-attr"><span>✨</span>Increado</div>
+      <div class="modal-attr"><span>🌐</span>Infinito</div>
+      <div class="modal-attr"><span>☩</span>Dios</div>
+    </div>`;
+  }
+
+  let saved = '';
+  try { saved = localStorage.getItem(m.key) || ''; } catch(e){}
+  html += `<div class="notes-section">
+    <div class="notes-lbl">Mis notas</div>
+    <textarea class="notes-ta" id="modal-notes" placeholder="Apuntes, ilustraciones, citas…">${saved}</textarea>
+  </div>`;
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const ta = document.getElementById('modal-notes');
+  if (ta && curKey) try { localStorage.setItem(curKey, ta.value); } catch(e){}
+  document.getElementById('modal-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+  curKey = null;
+}
+
+function closeBackdrop(e) {
+  if (e.target === document.getElementById('modal-backdrop')) closeModal();
+}
+</script>
+</body>
+</html>
