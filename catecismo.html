@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catecismo de Heidelberg — Teología Logos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:     #1a1610;
+      --bg2:    #221e16;
+      --bg3:    #2c2619;
+      --gold:   #c8a84b;
+      --gold2:  #e8d48a;
+      --cream:  #f0ead8;
+      --muted:  #9a9080;
+      --dim:    #6b6050;
+      --border: rgba(200,168,75,0.18);
+      --serif:  'Cinzel', serif;
+      --display:'Cinzel Decorative', cursive;
+      --body:   'EB Garamond', serif;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--cream); font-family:var(--body); overflow-x:hidden; cursor:none; }
+
+    .cursor      { position:fixed; width:8px; height:8px; background:var(--gold); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--gold); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); opacity:0.4; transition:width .2s,height .2s; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3.5rem; border-bottom:1px solid var(--border); backdrop-filter:blur(16px); background:rgba(26,22,16,0.9); }
+    .nav-logo { font-family:var(--display); font-size:12px; letter-spacing:0.14em; color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:10px; }
+    .logo-mark { width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--serif); }
+    .nav-center { display:flex; list-style:none; border:1px solid var(--border); }
+    .nav-center li a { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:10px 22px; display:block; border-right:1px solid var(--border); transition:color .3s,background .3s; }
+    .nav-center li:last-child a { border-right:none; }
+    .nav-center li a:hover { color:var(--gold); background:rgba(200,168,75,0.06); }
+    .nav-center li a.active { color:var(--gold); background:rgba(200,168,75,0.05); }
+    .nav-right { font-family:var(--serif); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); width:160px; text-align:right; }
+
+    /* HEADER */
+    .page-header { padding:9rem 4rem 4rem; border-bottom:1px solid var(--border); background:radial-gradient(ellipse 60% 80% at 85% 40%, rgba(200,168,75,0.05) 0%, transparent 65%); }
+    .breadcrumb { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:2rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .sep { opacity:0.35; }
+    .header-tag { font-family:var(--serif); font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; display:flex; align-items:center; gap:12px; }
+    .header-tag::before { content:''; display:block; width:24px; height:1px; background:var(--gold); opacity:0.5; }
+    .page-header h1 { font-family:var(--display); font-size:clamp(1.6rem,4vw,3.2rem); color:var(--cream); font-weight:400; margin-bottom:0.5rem; line-height:1.15; }
+    .page-header h1 span { color:var(--gold); }
+    .page-header .desc { font-family:var(--body); font-style:italic; font-size:1rem; color:var(--muted); max-width:560px; line-height:1.7; margin-top:0.5rem; }
+
+    /* LAYOUT */
+    .layout { display:grid; grid-template-columns:280px 1fr; min-height:calc(100vh - 300px); }
+
+    /* SIDEBAR */
+    .sidebar { border-right:1px solid var(--border); position:sticky; top:72px; height:calc(100vh - 72px); overflow-y:auto; background:var(--bg); display:flex; flex-direction:column; }
+    .sidebar::-webkit-scrollbar { width:4px; }
+    .sidebar::-webkit-scrollbar-track { background:transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background:rgba(200,168,75,0.2); border-radius:2px; }
+
+    /* Buscador */
+    .search-box { padding:1.2rem 1.4rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:10; }
+    .search-input { width:100%; background:rgba(0,0,0,0.2); border:1px solid var(--border); color:var(--cream); font-family:var(--body); font-size:0.9rem; padding:9px 12px; outline:none; transition:border-color .25s; }
+    .search-input::placeholder { color:var(--dim); }
+    .search-input:focus { border-color:rgba(200,168,75,0.4); }
+    .search-count { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); margin-top:6px; }
+
+    /* Dominicales */
+    .domingo-group { }
+    .domingo-header { font-family:var(--serif); font-size:9px; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); padding:0.8rem 1.4rem 0.4rem; opacity:0.7; background:rgba(200,168,75,0.03); border-bottom:1px solid rgba(200,168,75,0.06); }
+
+    /* Item de pregunta en sidebar */
+    .q-item { padding:0.75rem 1.4rem; border-bottom:1px solid rgba(200,168,75,0.06); cursor:pointer; transition:background .2s; display:flex; align-items:flex-start; gap:10px; }
+    .q-item:hover { background:rgba(200,168,75,0.05); }
+    .q-item.active { background:rgba(200,168,75,0.09); border-left:2px solid var(--gold); padding-left:calc(1.4rem - 2px); }
+    .q-item.hidden { display:none; }
+    .q-num { font-family:var(--serif); font-size:10px; color:var(--gold); opacity:0.7; flex-shrink:0; margin-top:2px; min-width:22px; }
+    .q-item.active .q-num { opacity:1; }
+    .q-preview { font-family:var(--body); font-size:0.82rem; color:var(--muted); line-height:1.4; }
+    .q-item.active .q-preview { color:var(--cream); }
+
+    /* PANEL PRINCIPAL */
+    .main-panel { padding:3rem 4rem 5rem; }
+
+    /* Welcome state */
+    .welcome { text-align:center; padding:4rem 2rem; }
+    .welcome-icon { font-size:2.5rem; margin-bottom:1.5rem; opacity:0.3; }
+    .welcome h2 { font-family:var(--serif); font-size:1rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-bottom:0.8rem; font-weight:400; }
+    .welcome p { font-family:var(--body); font-style:italic; font-size:0.95rem; color:var(--dim); }
+
+    /* Tarjeta de pregunta */
+    .q-card { display:none; }
+    .q-card.active { display:block; }
+
+    .q-card-header { margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
+    .q-card-meta { display:flex; align-items:center; gap:12px; margin-bottom:1rem; }
+    .q-card-num { font-family:var(--display); font-size:2.5rem; color:rgba(200,168,75,0.2); line-height:1; }
+    .q-card-tags { display:flex; flex-direction:column; gap:4px; }
+    .q-card-domingo { font-family:var(--serif); font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); }
+    .q-card-parte { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); }
+
+    /* Pregunta */
+    .q-label { font-family:var(--serif); font-size:9px; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); margin-bottom:0.6rem; display:flex; align-items:center; gap:10px; }
+    .q-label::after { content:''; flex:1; height:1px; background:rgba(200,168,75,0.14); }
+    .q-text { font-family:var(--body); font-size:1.1rem; color:var(--cream); line-height:1.75; margin-bottom:1.8rem; font-style:italic; }
+
+    /* Respuesta */
+    .r-label { font-family:var(--serif); font-size:9px; letter-spacing:0.28em; text-transform:uppercase; color:var(--muted); margin-bottom:0.6rem; display:flex; align-items:center; gap:10px; }
+    .r-label::after { content:''; flex:1; height:1px; background:rgba(200,168,75,0.08); }
+    .r-box { background:var(--bg2); border-left:2px solid rgba(200,168,75,0.3); padding:1.5rem 1.8rem; margin-bottom:2rem; }
+    .r-text { font-family:var(--body); font-size:1.05rem; color:rgba(240,234,216,0.82); line-height:1.9; }
+    .r-text sup { font-size:0.65rem; color:var(--gold); vertical-align:super; opacity:0.8; }
+
+    /* Referencias toggle */
+    .refs-toggle { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); cursor:pointer; border:1px solid var(--border); padding:8px 16px; display:inline-flex; align-items:center; gap:8px; transition:color .25s, border-color .25s; user-select:none; margin-bottom:1rem; }
+    .refs-toggle:hover { color:var(--gold); border-color:rgba(200,168,75,0.3); }
+    .refs-toggle.open { color:var(--gold); border-color:rgba(200,168,75,0.35); }
+    .refs-chevron { transition:transform .3s; font-size:0.8rem; }
+    .refs-toggle.open .refs-chevron { transform:rotate(180deg); }
+
+    .refs-box { display:none; background:rgba(0,0,0,0.15); border:1px solid rgba(200,168,75,0.08); padding:1.4rem 1.8rem; }
+    .refs-box.open { display:block; }
+    .ref-item { margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(200,168,75,0.06); }
+    .ref-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+    .ref-num { font-family:var(--serif); font-size:9px; letter-spacing:0.15em; color:var(--gold); display:inline-block; min-width:22px; }
+    .ref-cite { font-family:var(--serif); font-size:10px; color:var(--gold); letter-spacing:0.08em; }
+    .ref-text { font-family:var(--body); font-style:italic; font-size:0.88rem; color:var(--muted); line-height:1.65; margin-top:3px; }
+
+    /* Navegación entre preguntas */
+    .q-nav { display:flex; justify-content:space-between; margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); gap:1rem; }
+    .q-nav-btn { font-family:var(--serif); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); padding:10px 18px; cursor:pointer; background:transparent; transition:color .25s, border-color .25s; display:flex; align-items:center; gap:8px; }
+    .q-nav-btn:hover { color:var(--gold); border-color:rgba(200,168,75,0.3); }
+    .q-nav-btn:disabled { opacity:0.2; cursor:default; }
+    .q-nav-btn:disabled:hover { color:var(--muted); border-color:var(--border); }
+
+    /* No results */
+    .no-results { font-family:var(--body); font-style:italic; font-size:0.9rem; color:var(--dim); padding:1.5rem 1.4rem; text-align:center; }
+
+    footer { border-top:1px solid var(--border); padding:2.5rem 4rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-logo { font-family:var(--display); font-size:11px; letter-spacing:0.14em; color:var(--gold); }
+    .footer-copy  { font-family:var(--serif); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+
+    @media(max-width:820px){
+      .layout { grid-template-columns:1fr; }
+      .sidebar { position:static; height:auto; max-height:40vh; border-right:none; border-bottom:1px solid var(--border); }
+      .main-panel { padding:2rem 1.5rem; }
+      nav { padding:1rem 1.2rem; }
+      .nav-right { display:none; }
+      .page-header { padding:7rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html"><span class="logo-mark">Λ</span>Teología Logos</a>
+  <ul class="nav-center">
+    <li><a href="estudios.html">Estudios Bíblicos</a></li>
+    <li><a href="credos.html">Credos</a></li>
+    <li><a href="catecismo.html" class="active">Catecismo</a></li>
+  </ul>
+  <div class="nav-right">In principio erat Verbum</div>
+</nav>
+
+<header class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a><span class="sep">›</span>
+    <span style="color:var(--cream);">Catecismo de Heidelberg</span>
+  </div>
+  <p class="header-tag">Confesión reformada · 1563</p>
+  <h1>Catecismo de<br><span>Heidelberg</span></h1>
+  <p class="desc">129 preguntas y respuestas que resumen la fe cristiana reformada, organizadas en 52 dominicales para instrucción y meditación semanal.</p>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="search-box">
+      <input class="search-input" id="buscar" type="text" placeholder="Buscar pregunta o palabra…" oninput="buscar()"/>
+      <div class="search-count" id="search-count">129 preguntas</div>
+    </div>
+    <div id="lista-preguntas"></div>
+    <div class="no-results" id="no-results" style="display:none;">Sin resultados</div>
+  </aside>
+
+  <!-- PANEL PRINCIPAL -->
+  <main class="main-panel">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">✦</div>
+      <h2>Selecciona una pregunta</h2>
+      <p>Navega por el índice o usa el buscador<br>para encontrar cualquier pregunta.</p>
+    </div>
+    <div id="cards-container"></div>
+  </main>
+
+</div>
+
+<footer>
+  <span class="footer-logo">Teología Logos</span>
+  <span class="footer-copy">Λ · In principio erat Verbum</span>
+</footer>
+
+<script>
+// ══ DATOS DEL CATECISMO ══
+const PARTES = {
+  1: 'Primera Parte: De la miseria del hombre',
+  2: 'Segunda Parte: La redención del hombre',
+  3: 'Tercera Parte: De la gratitud'
+};
+
+const PREGUNTAS = [
+  // Domingo 1
+  {n:1, dom:1, parte:0, q:'¿Cuál es tu único consuelo tanto en la vida como en la muerte?',
+   r:'Que yo, con cuerpo y alma, tanto en la vida como en la muerte, no me pertenezco a mí mismo, sino a mi fiel Salvador Jesucristo, que me libró del poder del diablo, satisfaciendo enteramente con preciosa sangre por todos mis pecados, y me guarda de tal manera que sin la voluntad de mi Padre celestial ni un solo cabello de mi cabeza puede caer; antes es necesario que todas las cosas sirvan para mi salvación. Por eso también me asegura, por su Espíritu Santo, la vida eterna y me hace pronto y aparejado para vivir en adelante según su santa voluntad.',
+   refs:['Ro. 14.8','1Co. 6.19','1Co. 3.23; Tit. 2.14','He. 2.14; 1Jn. 3.8','1P. 1.18-19; 1Jn. 2.2','Jn. 6.39; Jn. 10.28','Mt. 10.30','Ro. 8.28','2Co. 1.22; Ef. 1.14; Ro. 8.16','Ro. 8.14; 1Jn. 3.3']},
+  {n:2, dom:1, parte:0, q:'¿Cuántas cosas debes saber para que, gozando de esta consolación, puedas vivir y morir dichosamente?',
+   r:'Tres: La primera, cuán grandes son mis pecados y miserias. La segunda, de qué manera puedo ser librado de ellos. Y la tercera, la gratitud que debo a Dios por su redención.',
+   refs:['Mt. 11.28-30; Ef. 5.8','Jn. 9.41; Ro. 3.10','Jn. 17.3; Hch. 4.12','Ef. 5.10; Sal. 50.14; Ro. 6.13']},
+
+  // Domingo 2
+  {n:3, dom:2, parte:1, q:'¿Cómo conoces tu miseria?',
+   r:'Por la Ley de Dios.',
+   refs:['Ro. 3.20']},
+  {n:4, dom:2, parte:1, q:'¿Qué pide la Ley de Dios de nosotros?',
+   r:'Cristo nos enseñó sumariamente en Mateo 22:37-40: Amarás al Señor tu Dios con todo tu corazón y con toda tu alma y con toda tu mente y con todas tus fuerzas. Este es el primero y grande mandamiento. Y el segundo es semejante: Amarás a tu prójimo como a ti mismo. De estos dos mandamientos depende toda la Ley y los Profetas.',
+   refs:['Dt. 6.5','Lv. 19.18','Mr. 12.30','Lc. 10.27']},
+  {n:5, dom:2, parte:1, q:'¿Puedes cumplir todo esto perfectamente?',
+   r:'No, porque por naturaleza estoy inclinado a aborrecer a Dios y a mi prójimo.',
+   refs:['Ro. 3.10,20,23; 1Jn. 1.8','Ro. 8.27; Ef. 2.3; Tit. 3.3']},
+
+  // Domingo 3
+  {n:6, dom:3, parte:1, q:'¿Creó, pues, Dios al hombre tan malo y perverso?',
+   r:'No, al contrario. Dios creó al hombre bueno haciéndolo a su imagen y semejanza, es decir, en verdadera justicia y santidad, para que rectamente conociera a Dios su Creador, le amase de todo corazón y bienaventurado viviese con Él eternamente, para alabarle y glorificarle.',
+   refs:['Gn. 1.31','Gn. 1.26-27','Ef. 4.24; Col. 3.10; 2Co. 3.18']},
+  {n:7, dom:3, parte:1, q:'¿De dónde procede esta corrupción de la naturaleza humana?',
+   r:'De la caída y desobediencia de nuestros primeros padres Adán y Eva en el paraíso; por ello, nuestra naturaleza ha quedado de tal manera corrompida, que todos somos concebidos y nacidos en pecado.',
+   refs:['Gn. 3; Ro. 5.12,18,19','Sal. 51.5; Gn. 5.3']},
+  {n:8, dom:3, parte:1, q:'¿Estamos tan corrompidos que somos totalmente incapaces de hacer el bien, e inclinados a todo mal?',
+   r:'Ciertamente; si no hemos sido regenerados por el Espíritu de Dios.',
+   refs:['Gn. 8.21; Gn. 6.5; Job 14.4; Is. 53.6','Jn. 3.3,5; 1Co. 12.3; 2Co. 3.5']},
+
+  // Domingo 4
+  {n:9, dom:4, parte:1, q:'¿No es Dios injusto con el hombre, al pedirle en su Ley que haga lo que no puede cumplir?',
+   r:'No, Dios creó al hombre en condiciones de poder cumplirla; pero el hombre por instigación del diablo y su propia rebeldía, se privó a sí y a toda su descendencia, de estos dones divinos.',
+   refs:['Ef. 4.24','Gn. 3.13; 1Ti. 2.13-14','Gn. 3.6; Ro. 5.12']},
+  {n:10, dom:4, parte:1, q:'¿Dejará Dios sin castigo tal desobediencia y apostasía?',
+   r:'De ninguna manera; antes su ira se engrandece horriblemente, tanto por el pecado original, como por aquellos que cometemos ahora y quiere castigarlos, por su perfecta justicia, temporal o eternamente.',
+   refs:['Gn. 2.17; Ro. 5.12','Sal. 50.21; Ro. 1.18; Ef. 5.6','Dt. 27.26; Gl. 3.10']},
+  {n:11, dom:4, parte:1, q:'¿No es Dios también misericordioso?',
+   r:'Dios es misericordioso; pero también es justo. Por tanto, su justicia exige que el pecado que se ha cometido contra su Suprema Majestad sea también castigado con el mayor castigo, que es pena eterna, así en el cuerpo como en el alma.',
+   refs:['Ex. 34.6-7','Sal. 7.9; Ex. 20.5; Nah. 1.2-3']},
+
+  // Domingo 5
+  {n:12, dom:5, parte:2, q:'Si por el justo juicio de Dios merecemos penas temporales y eternas, ¿No hay alguna posibilidad de liberarnos de estas penas y reconciliarnos con Dios?',
+   r:'Dios quiere que se dé satisfacción a su justicia; por eso es necesario que la satisfagamos eternamente por nosotros mismos o por algún otro.',
+   refs:['Gn. 2.17; Ex. 23.7; Ez. 18.4','Ro. 8.4']},
+  {n:13, dom:5, parte:2, q:'¿Pero podemos satisfacerla por nosotros mismos?',
+   r:'De ninguna manera: antes acrecentamos cada día nuestra deuda.',
+   refs:['Job 9.12; Job 15.15-16; Sal. 130.3; Mt. 6.12']},
+  {n:14, dom:5, parte:2, q:'¿Se hallará en alguna parte una mera criatura capaz de satisfacer por nosotros?',
+   r:'No. Primero porque Dios no quiere castigar en otra criatura la culpa de la cual el hombre es responsable. Segundo, porque una mera criatura es incapaz de soportar la ira eterna de Dios contra el pecado y liberar a otros de ella.',
+   refs:['Gn. 3.17','Nah. 1.6; Sal. 130.3']},
+  {n:15, dom:5, parte:2, q:'¿Entonces, qué mediador y redentor debemos buscar?',
+   r:'Uno que sea el verdadero hombre y perfectamente justo y que sea más poderoso que todas las criaturas, es decir, que sea al mismo tiempo verdadero Dios.',
+   refs:['1Co. 15.21','He. 7.26','Is. 7.14; Jer. 23.6']},
+
+  // Domingo 6
+  {n:16, dom:6, parte:2, q:'¿Por qué debe ser verdadero hombre y perfectamente justo?',
+   r:'Porque la justicia de Dios exige que la misma naturaleza humana que pecó, pague por el pecado; el hombre que es pecador, no puede pagar por otros.',
+   refs:['Ez. 18.4,20; Ro. 5.18; 1Co. 15.21','He. 7.26-27; Sal. 49.7; 1P. 3.18']},
+  {n:17, dom:6, parte:2, q:'¿Por qué debe ser también verdadero Dios?',
+   r:'Para que, por la potencia de su divinidad, pueda llevar en su humanidad la carga de la ira de Dios, y reparar y restituir en nosotros la justicia y la vida.',
+   refs:['Is. 9.5; Is. 63.3','Is. 53.4,11','Dt. 4.24; Nah. 1.6; Sal. 130.3','Is. 53.5,11']},
+  {n:18, dom:6, parte:2, q:'¿Mas quién es este mediador, que al mismo tiempo es verdadero Dios y verdadero hombre perfectamente justo?',
+   r:'Nuestro Señor Jesucristo, el cual nos ha sido hecho por Dios sabiduría y justicia, satisfacción y perfecta redención.',
+   refs:['1Jn. 5.20; Ro. 9.5','Lc. 1.42; Ro. 1.3; He. 2.14','Is. 53.9; He. 4.15','1Ti. 3.16; Lc. 2.11','1Co. 1.30']},
+  {n:19, dom:6, parte:2, q:'¿De dónde sabes todo esto?',
+   r:'Del santo evangelio, del cual Dios reveló primeramente en el paraíso, y después lo anunció por los santos patriarcas y profetas, y lo hizo representar por los sacrificios y las demás ceremonias de la Ley; y al fin lo cumplió por su Hijo unigénito.',
+   refs:['Gn. 3.15','Gn. 22.18; Gn. 49.10','Is. 53; Jer. 23.5-6','He. 10.1; Col. 2.17; Jn. 5.46','Ro. 10.14; Gl. 3.24']},
+
+  // Domingo 7
+  {n:20, dom:7, parte:2, q:'¿Son salvados por Cristo todos los hombres que perecieron en Adán?',
+   r:'No todos, sino solo aquellos que por la verdadera fe son incorporados en Él y aceptan sus beneficios.',
+   refs:['Mt. 7.14; Mt. 22.14','Mr. 16.16; Jn. 1.12; Is. 53.11']},
+  {n:21, dom:7, parte:2, q:'¿Qué es la verdadera fe?',
+   r:'No es solo un seguro conocimiento por el cual considero cierto todo lo que el Señor nos ha revelado en su palabra, sino también una verdadera confianza que el Espíritu Santo infunde en mi corazón, por el evangelio, dándome la seguridad de que no solo a otros, sino también a mí mismo Dios otorga la remisión de pecados, la justicia y la vida eterna, y eso de pura gracia y solamente por los méritos de Jesucristo.',
+   refs:['Stg. 2.19','He. 11.1; Ro. 4.18; Ro. 10.10','Gl. 5.22; Ef. 2.8','Ro. 1.16; Ro. 10.17','Ro. 1.7; He. 10.10','Ef. 2.8; Ro. 3.24']},
+  {n:22, dom:7, parte:2, q:'¿Qué es lo que debe creer el cristiano?',
+   r:'Todo lo que se nos ha prometido en el santo evangelio, sumariamente contenido en el Credo Apostólico, en cuyos artículos se expresa la fe universal e infalible de todos los cristianos.',
+   refs:['Jn. 20.31; Mt. 28.19; Mr. 1.15']},
+  {n:23, dom:7, parte:2, q:'¿Qué dicen estos artículos?',
+   r:'Creo en Dios Padre, todopoderoso, Creador del cielo y de la tierra. Creo en Jesucristo su único hijo, nuestro Señor; que fue concebido por el Espíritu Santo, nació de María Virgen; padeció bajo el poder de Poncio Pilato, fue crucificado, muerto y sepultado; descendió a los infiernos, y al tercer día resucitó de entre los muertos; subió a los cielos; está sentado a la diestra de Dios, Padre todopoderoso, de donde vendrá a juzgar a los vivos y a los muertos. Creo en el Espíritu Santo; una Santa Iglesia cristiana católica, la Comunión de los Santos; la remisión de los pecados, la resurrección del cuerpo y la vida eterna. Amén.',
+   refs:[]},
+
+  // Domingo 8
+  {n:24, dom:8, parte:2, q:'¿En cuántas partes se dividen estos artículos?',
+   r:'En tres. La Primera: De Dios Padre y de nuestra creación. La Segunda: De Dios Hijo y de nuestra redención. La Tercera: De Dios Espíritu Santo y nuestra santificación.',
+   refs:[]},
+  {n:25, dom:8, parte:2, q:'Si no hay más que una Esencia Divina, ¿por qué nombras tres: Padre, Hijo y Espíritu Santo?',
+   r:'Porque Dios se manifestó así en su palabra, de manera que estas tres personas son el único, verdadero y eterno Dios.',
+   refs:['Dt. 6.4; Ef. 4.6; 1Co. 8.4,6','Is. 61.1; Lc. 4.18; Mt. 3.16-17; Mt. 28.19; 1Jn. 5.7']},
+
+  // Domingo 9
+  {n:26, dom:9, parte:2, q:'¿Qué crees cuando dices: creo en Dios Padre Todopoderoso, creador del cielo y de la tierra?',
+   r:'Creo en el Padre de nuestro Señor Jesucristo, quien de la nada creó el cielo y la tierra, con todo lo que en ellos hay, sustentándolo y gobernándolo todo por su eterno consejo y providencia; es mi Dios y mi Padre por amor de su hijo Jesucristo. En él confío de tal manera que no dudo de que me proveerá de todo lo necesario para mi alma y mi cuerpo. Y aún más, creo que todos los males que puedo sufrir por su voluntad, en este valle de lágrimas, los convertirá en bien para mi salvación. Él puede hacerlo como Dios todopoderoso, y quiere hacerlo como Padre benigno y fiel.',
+   refs:['Ex. 20.11; Hch. 4.24','He. 1.3; Sal. 104.27-30; Mt. 10.29','Jn. 1.12; Ro. 8.15; Gl. 4.5-7','Sal. 55.22; Mt. 6.25-26','Ro. 8.28','Is. 46.4','Mt. 6.32-33; Mt. 7.9-11']},
+
+  // Domingo 10
+  {n:27, dom:10, parte:2, q:'¿Qué es la providencia de Dios?',
+   r:'Es el poder de Dios omnipotente y presente en todo lugar, por el cual sustenta y gobierna el cielo, la tierra y todas las criaturas de tal manera, que todo lo que la tierra produce, la lluvia y la sequía, la fertilidad y la esterilidad, la comida y la bebida, la salud y la enfermedad, riquezas y pobrezas, y finalmente todas las cosas no acontecen sin razón alguna como por azar, sino por su consejo y voluntad paternal.',
+   refs:['Hch. 17.25,27-28; Jer. 23.23-24','He. 1.3','Jer. 5.24; Hch. 14.17','Jn. 9.3','Pr. 22.2','Mt. 10.29; Pr. 16.33']},
+  {n:28, dom:10, parte:2, q:'¿Qué utilidad tiene para nosotros este conocimiento de la creación y providencia divina?',
+   r:'Que en toda adversidad tengamos paciencia, y en la prosperidad seamos agradecidos, y tengamos puesta en el futuro toda nuestra esperanza en Dios nuestro padre fidelísimo, sabiendo con certeza que no hay cosa que nos puede apartar de su amor, pues todas las criaturas están sujetas a su poder de tal manera que no pueden hacer nada sin su voluntad.',
+   refs:['Ro. 5.3; Stg. 1.3; Job 1.21-22','1Ts. 5.18; Dt. 8.10','Sal. 55.22; Ro. 5.4','Ro. 8.38-39','Job 1.12; Job 2.6; Pr. 21.1']},
+
+  // Domingo 11
+  {n:29, dom:11, parte:2, q:'¿Por qué el hijo de Dios es llamado Jesús, que significa Salvador?',
+   r:'Porque nos salva y libra de todos nuestros pecados, y porque en ningún otro se debe buscar ni se puede hallar salvación.',
+   refs:['Mt. 1.21; He. 7.25','Hch. 4.12; Jn. 15.4-5; Is. 43.11']},
+  {n:30, dom:11, parte:2, q:'¿Creen pues también en el único Salvador Jesús, aquellos que buscan su salvación en los santos, o en sí mismos o en cualquiera otra parte?',
+   r:'No, porque aunque de boca se gloríen de tenerle por Salvador, de hecho niegan al único Salvador Jesús; pues necesariamente resulta, o que Jesús no es perfecto Salvador o que aquellos que con verdadera fe le reciben por Salvador tienen que poseer en Él todo lo necesario para su salvación.',
+   refs:['1Co. 1.13,30,31; Gl. 5.4','He. 12.2; Is. 9.6; Col. 1.19-20; 1Jn. 1.7']},
+
+  // Domingo 12
+  {n:31, dom:12, parte:2, q:'¿Por qué se le llama Cristo, es decir: ungido?',
+   r:'Porque fue ordenado del Padre y ungido del Espíritu Santo, para ser nuestro supremo profeta y maestro, que nos ha revelado plenamente el secreto consejo y voluntad de Dios acerca de nuestra redención; para ser nuestro único y supremo pontífice, quien por el solo sacrificio de su cuerpo nos ha redimido, e intercede continuamente delante del Padre por nosotros; para ser nuestro eterno Rey que nos gobierna por su palabra y su espíritu y nos guarda y conserva la redención que nos ha adquirido.',
+   refs:['Sal. 45.7; Is. 61.1; Lc. 4.18','Dt. 18.15; Hch. 3.22; Is. 55.4','Jn. 1.18; Jn. 15.15','Sal. 110.4','He. 10.12,14','Ro. 8.34; 1Jn. 2.1','Mt. 28.18; Jn. 10.28']},
+  {n:32, dom:12, parte:2, q:'Pues, ¿por qué te llaman cristiano?',
+   r:'Porque por la fe soy miembro de Jesucristo y participante de su unción, para que confiese su nombre y me ofrezca a Él, en sacrificio vivo y agradable; y que en esta vida luche contra el pecado y Satanás con una conciencia limpia y buena; y que, después de esta vida, reine con Cristo eternamente sobre todas las criaturas.',
+   refs:['Hch. 11.26','1Co. 6.15','1Jn. 2.27; Hch. 2.17','Mt. 10.32; Ro. 10.10','Ro. 12.1; Ap. 1.6','1P. 2.11; Ef. 6.11','2Ti. 2.12; Mt. 25.34']},
+
+  // Domingo 13
+  {n:33, dom:13, parte:2, q:'¿Por qué se llama a Cristo el unigénito hijo de Dios, si nosotros también somos hijos de Dios?',
+   r:'Porque Cristo es el hijo eterno y natural de Dios; pero nosotros hemos sido adoptados por gracia como hijos de Dios por amor de él.',
+   refs:['Jn. 1.14; He. 1.1-2; Jn. 3.16','Ro. 8.16; Jn. 1.12; Gl. 4.6; Ef. 1.5-6']},
+  {n:34, dom:13, parte:2, q:'¿Por qué le llamamos nuestro Señor?',
+   r:'Porque rescatando nuestros cuerpos y almas de los pecados, no con oro o plata, sino con su preciosa sangre, y librándonos del poder del Diablo, nos ha hecho suyos.',
+   refs:['1P. 1.18-19; 1Co. 6.20; 1Ti. 2.6']},
+
+  // Domingo 14
+  {n:35, dom:14, parte:2, q:'¿Qué crees cuando dices: que fue concebido por el Espíritu Santo y nació de María virgen?',
+   r:'Que el eterno Hijo de Dios, el cual es y permanece verdadero y eterno Dios, tomó la naturaleza verdaderamente humana de la carne y sangre de la virgen María, por obra del Espíritu Santo, para que juntamente fuese la verdadera simiente de David, semejante a sus hermanos excepto en el pecado.',
+   refs:['1Jn. 5.20; Ro. 9.5; Col. 1.15','Gl. 4.4; Lc. 1.31,42-43','Mt. 1.20; Lc. 1.35','Ro. 1.3; Sal. 132.11','Fil. 2.7; He. 2.14,17','He. 4.15']},
+  {n:36, dom:14, parte:2, q:'¿Qué fruto sacas de la santa concepción y nacimiento de Cristo?',
+   r:'Que es nuestro Mediador, y con su inocencia y perfecta santidad cubre mis pecados en los cuales he sido concebido y nacido, para que no aparezcan en la presencia de Dios.',
+   refs:['He. 7.26-27','1P. 1.18-19; 1Co. 1.30-31; Is. 53.11']},
+
+  // Domingo 15
+  {n:37, dom:15, parte:2, q:'¿Qué es lo que crees cuando dices: padeció?',
+   r:'Que todo el tiempo que en este mundo vivió y especialmente al fin de su vida, sostenía en el cuerpo y el alma la ira de Dios contra el pecado de todo el género humano, para que con su pasión, como único sacrificio propiciatorio, librara nuestro cuerpo y alma de la eterna condenación, y nos alcanzase la gracia de Dios, la justicia y la vida eterna.',
+   refs:['Is. 53.4; 1P. 2.24; 1Ti. 2.6','Is. 53.10; Ef. 5.2; 1Jn. 2.2','Gl. 3.13; He. 9.12','Ro. 3.25; 2Co. 5.21; Jn. 3.16']},
+  {n:38, dom:15, parte:2, q:'¿Por qué padeció bajo el poder de Poncio Pilato juez?',
+   r:'Para que, inocente, condenado por el juez político, nos librase del severo juicio de Dios, que había de venir sobre nosotros.',
+   refs:['Jn. 18.38; Mt. 27.24; Lc. 23.14-15','Sal. 69.4; Is. 53.4-5; 2Co. 5.21']},
+  {n:39, dom:15, parte:2, q:'¿Es más importante el haber sido crucificado, que morir de otro modo?',
+   r:'Sí, porque este género de muerte me garantiza que él cargó sobre sí mismo la maldición sentenciada sobre mí, por cuanto la muerte de cruz era maldita de Dios.',
+   refs:['Gl. 3.13','Dt. 21.23']},
+
+  // Domingo 16
+  {n:40, dom:16, parte:2, q:'¿Por qué fue necesario que Cristo se humillase hasta la muerte?',
+   r:'Porque la justicia de Dios no se podía satisfacer por nuestros pecados, sino con la misma muerte del Hijo de Dios.',
+   refs:['Gn. 2.17','Ro. 8.3-4; He. 2.14-15']},
+  {n:41, dom:16, parte:2, q:'¿Por qué fue también sepultado?',
+   r:'Para testificar que estaba verdaderamente muerto.',
+   refs:['He. 13.29; Mt. 27.59-60; Lc. 23.53']},
+  {n:42, dom:16, parte:2, q:'Ya que Cristo murió por nosotros, ¿por qué hemos de morir también?',
+   r:'Nuestra muerte no es una satisfacción por nuestros pecados, sino una liberación del pecado y un paso hacia la vida eterna.',
+   refs:['Mr. 8.37; Sal. 49.7','Fil. 1.23; Jn. 5.24; Ro. 7.24']},
+  {n:43, dom:16, parte:2, q:'¿Qué provecho recibimos además del sacrificio y muerte de Cristo en la cruz?',
+   r:'Por su poder nuestro viejo hombre está crucificado, muerto y sepultado juntamente con Él, para que, en adelante, no reinen más en nosotros las perversas concupiscencias y deseos de la carne, sino que nos ofrezcamos a Él en sacrificio agradable.',
+   refs:['Ro. 6.6','Ro. 6.6,12','Ro. 12.1']},
+  {n:44, dom:16, parte:2, q:'¿Por qué se añade: descendió a los infiernos?',
+   r:'Para que en mis extremados dolores y grandísimas tentaciones me asegure y me sostenga con este consuelo, de que mi Señor Jesucristo, por medio de las inexplicables angustias, tormentos, espantos y turbaciones infernales de su alma, en los cuales fue sumido en toda su pasión, pero especialmente clavado en la cruz, me ha librado de las ansias y tormentos del infierno.',
+   refs:['Sal. 18.4-5; Sal. 116.3; Mt. 26.38; Mt. 27.46; He. 5.7','Is. 53.5']},
+
+  // Domingo 17
+  {n:45, dom:17, parte:2, q:'¿Qué nos aprovecha la resurrección de Cristo?',
+   r:'Primero, por su resurrección ha vencido a la muerte, para hacernos participantes de aquella justicia que conquistó por su muerte. Segundo, también nosotros somos resucitados ahora por su poder a una nueva vida. Tercero, la resurrección de Cristo, cabeza nuestra, es una cierta prenda de nuestra gloriosa resurrección.',
+   refs:['Ro. 4.25; 1P. 1.3; 1Co. 15.16','Ro. 6.4; Col. 3.1; Ef. 2.5-6','1Co. 15.20-21']},
+
+  // Domingo 18
+  {n:46, dom:18, parte:2, q:'¿Qué entiendes por: subió a los cielos?',
+   r:'Que Cristo, a la vista de sus discípulos, fue elevado de la tierra al cielo y que está allí para nuestro bien, hasta que vuelva a juzgar a los vivos y a los muertos.',
+   refs:['Hch. 1.9; Mr. 16.19; Lc. 24.51','He. 9.24; He. 4.14; Ro. 8.34','Hch. 1.11; Mt. 24.30']},
+  {n:47, dom:18, parte:2, q:'Luego, ¿no está Cristo con nosotros hasta el fin del mundo como lo prometió?',
+   r:'Cristo es verdadero Dios y verdadero hombre: en cuanto a la naturaleza humana ahora ya no está en la tierra, pero en cuanto a su deidad, majestad, gracia y espíritu en ningún momento está ausente de nosotros.',
+   refs:['He. 8.4; Mt. 26.11; Jn. 16.28','Jer. 23.24; Mt. 28.20']},
+  {n:48, dom:18, parte:2, q:'¿Pero si la naturaleza humana no está en todas partes donde está la divina, no se separan con esto las dos naturalezas en Cristo?',
+   r:'De ninguna manera: porque dado que la divinidad es incomprensible y está presente en todo lugar, resulta necesariamente que en efecto está fuera de la naturaleza humana que ha tomado, pero con todo y con eso está en ella y queda unida a ella personalmente.',
+   refs:['Jer. 23.24; Hch. 7.49','Col. 2.9; Jn. 3.13']},
+  {n:49, dom:18, parte:2, q:'¿Cuáles beneficios nos da la ascensión de Cristo al cielo?',
+   r:'Primero, él es nuestro abogado en el cielo ante la presencia de su Padre. Segundo, tenemos nuestra carne en el cielo como una segura garantía que Cristo, como la Cabeza, nos llevará consigo mismo al cielo como miembros suyos. Tercero, nos envía su Espíritu como las arras, por cuyo poder buscamos las cosas de arriba, donde está Cristo sentado a la diestra del Padre, y no las cosas de la tierra.',
+   refs:['1Jn. 2.1; Ro. 8.34','Jn. 14.2; Jn. 17.24; Ef. 2.6','Jn. 14.16; Jn. 16.7; Hch. 2.33; 2Co. 1.22','Col. 3.1']},
+
+  // Domingo 19
+  {n:50, dom:19, parte:2, q:'¿Por qué se añade: está sentado a la diestra de Dios, Padre todopoderoso?',
+   r:'Porque Cristo subió al cielo para mostrarse allí como cabeza de su Iglesia, por quien el Padre gobierna todas las cosas.',
+   refs:['Ef. 1.20; Col. 1.18','Mt. 28.18; Jn. 5.22']},
+  {n:51, dom:19, parte:2, q:'¿De qué nos sirve esta gloria de Cristo, nuestra cabeza?',
+   r:'Primero, para que el Espíritu Santo derrame en nosotros, sus miembros, los dones celestiales. Segundo, para protegernos y ampararnos de todos nuestros enemigos.',
+   refs:['Hch. 2.33; Ef. 4.8','Sal. 2.9; Sal. 110.1-2; Jn. 10.28']},
+  {n:52, dom:19, parte:2, q:'¿Qué consuelo te ofrece la vuelta de Cristo para juzgar a los vivos y a los muertos?',
+   r:'Que en todas las miserias y persecuciones, con plena confianza, espero del cielo como juez a Aquel mismo que primeramente se puso delante del juicio de Dios por mí y alejó de mí toda maldición; el cual echará a todos los enemigos suyos y míos en las penas eternas; y a mí, con todos los elegidos, me conducirá al gozo del cielo y a la gloria eterna.',
+   refs:['Fil. 3.20; Lc. 21.28; Tit. 2.13','Mt. 25.41; 2Ts. 1.6','Mt. 25.34; 2Ts. 1.7']},
+
+  // Domingo 20
+  {n:53, dom:20, parte:2, q:'¿Qué crees del Espíritu Santo?',
+   r:'Que con el Eterno Padre e Hijo, es verdadero y eterno Dios. Y que viene a morar en mí para que, por la verdadera fe, me haga participante de Cristo y de todos sus beneficios, me consuele y quede conmigo eternamente.',
+   refs:['1Jn. 5.7; Is. 48.16; 1Co. 3.16; Hch. 5.3-4','Gl. 4.6; 2Co. 1.22; Ef. 1.13','Gl. 3.14; 1P. 1.2','Jn. 15.26; Hch. 9.31','Jn. 14.16']},
+
+  // Domingo 21
+  {n:54, dom:21, parte:2, q:'¿Qué crees de la santa Iglesia cristiana católica?',
+   r:'Que el Hijo de Dios, desde el principio hasta el fin del mundo, de todo el género humano, congrega, guarda y protege para sí, por su Espíritu y su palabra en la unidad de la verdadera fe, una comunidad, elegida para la vida eterna; de la cual yo soy un miembro vivo y permaneceré para siempre.',
+   refs:['Jn. 10.11; Ef. 4.11-13','Sal. 71.17-18; Is. 59.21; 1Co. 11.26','Gn. 26.4; Ap. 5.9','Mt. 16.18; Jn. 10.28-30','Is. 59.21; Ro. 10.14-17','Ef. 4.3-5','Ro. 8.29; Ef. 1.10-13','1Jn. 3.14; 2Co. 13.5','Sal. 23.6; 1Co. 1.8-9']},
+  {n:55, dom:21, parte:2, q:'¿Qué entiendes por la comunión de los santos?',
+   r:'Primero, que todos los fieles en general y cada uno en particular, como miembros del Señor Jesucristo, tienen la comunión de Él y de todos sus bienes y dones. Segundo, que cada uno debe sentirse obligado a emplear con amor y gozo los dones que ha recibido, utilizándolos en beneficio de los demás.',
+   refs:['1Jn. 1.3; Ro. 8.32; 1Co. 12.12-13','1Co. 12.21; Fil. 2.4-8']},
+  {n:56, dom:21, parte:2, q:'¿Qué crees de la remisión de los pecados?',
+   r:'Creo que Dios, por la satisfacción de Cristo, no quiere acordarse jamás de mis pecados, ni de mi naturaleza corrompida, con la cual debo luchar toda la vida, sino que gratuitamente me otorga la justicia de Cristo para que yo nunca venga a condenación.',
+   refs:['1Jn. 2.2; 1Jn. 1.7; 2Co. 5.19','Ro. 7.23-25; Jer. 31.34; Sal. 103.3,10,12','Jn. 3.18; Jn. 5.24']},
+
+  // Domingo 22
+  {n:57, dom:22, parte:2, q:'¿Qué consuelo te da la resurrección de la carne?',
+   r:'Que no solo mi alma después de esta vida será llevada en el mismo instante a Cristo, su cabeza, sino que también está mi carne, siendo resucitada por la potencia de Cristo, será de nuevo unida a mi alma y hecha conforme al glorioso cuerpo de Cristo.',
+   refs:['Lc. 16.22; Lc. 23.43; Fil. 1.21,23','Job 19.25-26; 1Jn. 3.2; Fil. 3.21']},
+  {n:58, dom:22, parte:2, q:'¿Qué consolación te ofrece el artículo de la vida eterna?',
+   r:'Que ahora siento en mi corazón un principio de la vida eterna, después de esta vida, gozaré de una cumplida y perfecta bienaventuranza que ningún ojo vio ni oído oyó, ni entendimiento humano comprendió, y esto para que ella alabe a Dios para siempre.',
+   refs:['2Co. 5.2-3','1Co. 2.9']},
+
+  // Domingo 23
+  {n:59, dom:23, parte:2, q:'¿Qué te aprovecha el creer en todas estas cosas?',
+   r:'Que delante de Dios soy justo en Jesucristo, y heredero de la vida eterna.',
+   refs:['Hab. 2.4; Ro. 1.17; Jn. 3.36']},
+  {n:60, dom:23, parte:2, q:'¿Cómo eres justo ante Dios?',
+   r:'Por la sola verdadera fe en Jesucristo; de manera que, aunque mi conciencia me acuse de haber pecado gravemente contra todos los mandamientos de Dios, no habiendo guardado jamás ninguno de ellos, y estando siempre inclinado a todo mal, sin merecimiento alguno mío, solo por su gracia, Dios me imputa y da la perfecta satisfacción, justicia y santidad de Cristo, como si no hubiera yo tenido, ni cometido algún pecado, antes bien como si yo mismo hubiera cumplido aquella obediencia que Cristo cumplió por mí, con tal de que yo abrace estas gracias y beneficios con verdadera fe.',
+   refs:['Ro. 3.21-22,24; Ro. 5.1-2; Gl. 2.16','Ro. 3.9','Ro. 7.23','Tit. 3.5','Ro. 3.24; Ef. 2.8','Ro. 4.4-5; 2Co. 5.19','1Jn. 2.2; 1Jn. 2.1','2Co. 5.21','Ro. 3.22; Jn. 3.18']},
+  {n:61, dom:23, parte:2, q:'¿Por qué afirmas ser justo solo por la fe?',
+   r:'No porque agrade a Dios por la dignidad de mi fe, sino porque solo la satisfacción, justicia y santidad de Cristo, son mi propia justicia delante de Dios, y que yo no puedo cumplir de otro modo que por la fe.',
+   refs:['1Co. 1.30; 1Co. 2.2','1Jn. 5.10']},
+
+  // Domingo 24
+  {n:62, dom:24, parte:2, q:'¿Por qué no pueden justificarnos ante Dios las buenas obras, aunque solo sea una parte?',
+   r:'Porque es necesario que aquella justicia, que ha de aparecer delante del juicio de Dios, sea perfectamente cumplida y de todo punto conforme a la Ley Divina; y nuestras buenas obras, aun las mejores en esta vida, son imperfectas y contaminadas de pecado.',
+   refs:['Gl. 3.10; Dt. 27.26','Is. 64.6']},
+  {n:63, dom:24, parte:2, q:'Luego, ¿cómo es posible que nuestras obras no merezcan nada, si Dios promete remunerarlas en la vida presente y en la venidera?',
+   r:'Esta remuneración no se da por merecimiento, sino por gracia.',
+   refs:['Lc. 17.10']},
+  {n:64, dom:24, parte:2, q:'Pero esta doctrina, ¿no hace a los hombres negligentes e impíos?',
+   r:'No, porque es imposible que no produzcan frutos de gratitud los que por la fe verdadera han sido injertados en Cristo.',
+   refs:['Mt. 7.18; Jn. 15.5']},
+
+  // Domingo 25
+  {n:65, dom:25, parte:2, q:'Si solo la fe nos hace participantes de Cristo y de todos sus beneficios, dime, ¿de dónde procede esta fe?',
+   r:'Del Espíritu Santo que la hace obrar por la predicación del santo evangelio, encendiendo nuestros corazones, y confirmándola por el uso de los sacramentos.',
+   refs:['Ef. 2.8; Ef. 6.23; Jn. 3.5','Mt. 28.19; 1P. 1.22-23']},
+  {n:66, dom:25, parte:2, q:'¿Qué son los Sacramentos?',
+   r:'Son señales sagradas y visibles, y sellos instituidos por Dios, para sernos declarada mejor y sellada por ellos la promesa del evangelio; a saber, que la remisión de los pecados y la vida eterna, por aquel único sacrificio de Cristo cumplido en la cruz, se nos da de gracia no solamente a todos los creyentes en general, sino también a cada uno en particular.',
+   refs:['Gn. 17.11; Ro. 4.11; He. 9.7-9']},
+  {n:67, dom:25, parte:2, q:'Entonces, ¿la palabra y los Sacramentos tienen como fin llevar nuestra fe al sacrificio de Cristo cumplido en la cruz, como el único fundamento de nuestra salvación?',
+   r:'Así es, porque el Espíritu Santo nos enseña por el evangelio y confirma por los Sacramentos, que toda nuestra salud está puesta en el único sacrificio de Cristo ofrecido por nosotros en la cruz.',
+   refs:['Ro. 6.3; Gl. 3.27']},
+  {n:68, dom:25, parte:2, q:'¿Cuántos sacramentos ha instituido Cristo en el Nuevo Testamento?',
+   r:'Dos: El Santo Bautismo y la Santa Cena.',
+   refs:[]},
+
+  // Domingo 26
+  {n:69, dom:26, parte:2, q:'¿Por qué el Santo bautismo te asegura y recuerda que eres participante de aquel único sacrificio de Cristo, hecho en la Cruz?',
+   r:'Porque Cristo ha instituido el lavamiento exterior del agua, añadiendo esta promesa, que tan ciertamente soy lavado con su sangre y Espíritu de las inmundicias de mi alma, es a saber, de todos mis pecados, como soy rociado y lavado exteriormente con el agua, con la cual se suelen limpiar las suciedades del cuerpo.',
+   refs:['Mt. 28.19; Mr. 16.16; Hch. 2.38; Ro. 6.3-4','1P. 3.21; Mr. 1.4; Lc. 3.3']},
+  {n:70, dom:26, parte:2, q:'¿Qué es ser lavado con la sangre y el Espíritu de Cristo?',
+   r:'Es recibir de la gracia de Dios, la remisión de los pecados, por la sangre de Cristo, que derramó por nosotros en su sacrificio en la cruz. Y también ser renovados y santificados por el Espíritu Santo, para ser miembros de Cristo, a fin de que muramos al pecado y vivamos santa e irreprensiblemente.',
+   refs:['He. 12.24; 1P. 1.2; Ap. 1.5; Zac. 13.1','Jn. 1.33; Jn. 3.5; Ro. 6.4; Col. 2.12']},
+  {n:71, dom:26, parte:2, q:'¿Dónde prometió Cristo que Él nos quiere limpiar tan ciertamente por su sangre y Espíritu como somos lavados por el agua del bautismo?',
+   r:'En la institución del Bautismo: «Id, enseñad a todas las gentes, bautizándolas en el nombre del Padre y del Hijo, y del Espíritu Santo» (Mt. 28:19). «El que creyere y fuere bautizado, será salvo» (Mr.16:16). Esta misma promesa se repite cuando las sagradas escrituras llaman al bautismo «lavamiento de la regeneración y ablución de pecados» (Tit. 3:5; Hch. 22:16).',
+   refs:['Tit. 3.5; Hch. 22.16']},
+
+  // Domingo 27
+  {n:72, dom:27, parte:2, q:'¿Es el lavamiento, la purificación misma de los pecados?',
+   r:'No, porque solo la sangre de Jesucristo y el Espíritu Santo nos limpia y purifica de todo pecado.',
+   refs:['Mt. 3.11; 1P. 3.21; Ef. 5.26','1Jn. 1.7; 1Co. 6.11']},
+  {n:73, dom:27, parte:2, q:'Entonces, ¿por qué llama el Espíritu Santo al bautismo el lavado de la regeneración y la purificación de los pecados?',
+   r:'Dios no habla así sin una razón justificada, pues Él no solo quiere enseñarnos que nuestros pecados se purifican por la sangre y el Espíritu de Cristo, como las suciedades del cuerpo por el agua, sino más aún: certificarnos por este divino símbolo y prenda que verdaderamente somos limpiados por el lavamiento interior y espiritual de nuestros pecados.',
+   refs:['Ap. 1.5; 1Co. 6.11','Mr. 16.16; Gl. 3.27']},
+  {n:74, dom:27, parte:2, q:'¿Se ha de bautizar también a los niños?',
+   r:'Naturalmente, porque están comprendidos, como los adultos, en el pacto, y pertenecen a la iglesia de Dios. Tanto a estos como a los adultos se les promete por la sangre de Cristo, la remisión de los pecados y el Espíritu Santo, obrador de la fe; por esto, y como señal de este pacto, deben ser incorporados a la Iglesia de Dios.',
+   refs:['Gn. 17.7','Mt. 19.14','Lc. 1.15; Is. 44.1-3; Hch. 2.39','Hch. 10.47','Gn. 17.14','Col. 2.11-13']},
+
+  // Domingo 28
+  {n:75, dom:28, parte:2, q:'¿Cómo te asegura y confirma la Santa Cena que eres hecho participante de aquel único sacrificio de Cristo, ofrecido en la cruz, y de todos sus bienes?',
+   r:'Porque Cristo me ha mandado, y también a todos los fieles, comer de este pan partido y beber de esta copa en memoria suya, añadiendo esta promesa: que su cuerpo ha sido ofrecido y sacrificado por mí en la cruz, y su sangre derramada por mis pecados, tan cierto como que veo con mis ojos que el pan del Señor es partido para mí. Y que Él tan cierto alimenta mi alma para la vida eterna con su cuerpo crucificado y con su sangre derramada, como yo recibo con la boca corporal el pan y el vino.',
+   refs:['Mt. 26.26-28; 1Co. 10.16-17; 1Co. 11.23-25']},
+  {n:76, dom:28, parte:2, q:'¿Qué significa comer el cuerpo sacrificado de Cristo y beber su sangre derramada?',
+   r:'Significa no solo abrazar con firme confianza del alma toda la pasión y muerte de Cristo, y por este medio alcanzar la remisión de pecados y la vida eterna, sino unirse más y más a su santísimo cuerpo por el Espíritu Santo, el cual habita juntamente en Cristo y en nosotros.',
+   refs:['Jn. 6.35,40,47-54','Jn. 6.55-56','Col. 3.1; 1Co. 11.26']},
+  {n:77, dom:28, parte:2, q:'¿Dónde prometió Cristo que dará a los creyentes en comida y en bebida su cuerpo y sangre?',
+   r:'En la institución de la cena: Nuestro Señor Jesucristo, la noche que fue entregado, tomó el pan, y habiendo dado gracias, lo partió y dijo: Tomad, comed, esto es mi cuerpo que por vosotros es partido; haced esto en memoria de mí. Asimismo tomó también la copa, diciendo: Esta copa es el nuevo pacto en mi sangre; haced esto todas las veces que la beberéis, en memoria de mí. Así, pues, todas las veces que comiereis este pan y bebiereis esta copa, la muerte del Señor anunciáis hasta que él venga.',
+   refs:['1Co. 11.23-26; Mt. 26.26-28; Mr. 14.22-24; Lc. 22.19-20']},
+
+  // Domingo 29
+  {n:78, dom:29, parte:2, q:'¿El pan y el vino se convierten substancialmente en el mismo cuerpo y sangre de Cristo?',
+   r:'De ninguna manera, pues como el agua del Bautismo no se convierte en la sangre de Cristo, ni es la misma ablución de los pecados, sino solamente una señal y sello de aquellas cosas; así el pan de la Cena del Señor no es el mismo cuerpo, aunque por la naturaleza y uso de los sacramentos es llamado el cuerpo de Cristo.',
+   refs:['Mt. 26.29','Ef. 5.26; Tit. 3.5','1Co. 11.26','Gn. 17.10-11; Ex. 12.11']},
+  {n:79, dom:29, parte:2, q:'¿Por qué llama Cristo al pan su cuerpo y a la copa su sangre?',
+   r:'Cristo no habla así sin una razón poderosa, y no solamente para enseñarnos que así como el pan y el vino sustentan la vida corporal, su cuerpo crucificado y su sangre derramada son la verdadera comida y bebida que alimentan nuestras almas para la vida eterna; más aún para asegurarnos por estas señales y sellos visibles, que por obra del Espíritu Santo somos participantes de su cuerpo y sangre.',
+   refs:['Jn. 6.55','1Co. 10.16']},
+
+  // Domingo 30
+  {n:80, dom:30, parte:2, q:'¿Qué diferencia hay entre la Cena del Señor y la misa papal?',
+   r:'La Cena del Señor nos testifica que tenemos remisión perfecta de todos nuestros pecados por el único sacrificio de Cristo, que Él mismo cumplió en la Cruz una sola vez; y también que por el Espíritu Santo, estamos incorporados en Cristo. La misa enseña que los vivos y los muertos no tienen la remisión de los pecados por la sola pasión de Cristo, a no ser que cada día Cristo sea ofrecido por ellos por mano de los sacerdotes; enseña también que Cristo está corporalmente en las especies de pan y de vino. Por lo tanto, el fundamento propio de la misa no es otra cosa que una negación del único sacrificio y pasión de Jesucristo y una idolatría maldita.',
+   refs:['He. 10.10,12; He. 7.26-27; Jn. 19.30','1Co. 10.16-17','He. 10.12,14']},
+  {n:81, dom:30, parte:2, q:'¿Quiénes son los que deben participar de la mesa del Señor?',
+   r:'Tan solo aquellos que se duelan verdaderamente de haber ofendido a Dios con sus pecados, confiando en ser perdonados por el amor de Cristo, y que también deseen fortalecer más y más su fe y mejorar su vida. Pero los hipócritas y los que no se arrepienten de verdad, comen y beben su condenación.',
+   refs:['1Co. 11.28; 1Co. 10.19-22']},
+  {n:82, dom:30, parte:2, q:'¿Deben admitirse también a esta Cena, los que por su confesión y vida se declaran infieles e impíos?',
+   r:'De ninguna manera, porque así se profana el pacto de Dios, y se provoca su ira sobre toda la congregación. Por lo cual, la Iglesia debe, según la orden de Cristo y de sus apóstoles, excomulgar y privar a los tales de la Cena, hasta que se arrepientan y rectifiquen su vida.',
+   refs:['1Co. 11.20,34; Is. 1.11; Sal. 50.16']},
+
+  // Domingo 31
+  {n:83, dom:31, parte:2, q:'¿Qué son las llaves del reino de los cielos?',
+   r:'La predicación del santo evangelio y la disciplina eclesiástica: con los cuales se abre el cielo a los fieles, y se cierra a los infieles.',
+   refs:[]},
+  {n:84, dom:31, parte:2, q:'¿De qué manera se abre y se cierra el reino de los cielos por la predicación del evangelio?',
+   r:'Cuando públicamente es anunciado y testificado a todos los fieles en general y a cada uno en particular, que todos los pecados les son perdonados por Dios, por los méritos de Cristo, todas las veces que abrazaren con verdadera fe la promesa del evangelio. Al contrario, a todos los infieles e hipócritas, se les anuncia que la ira de Dios y la condenación eterna caerá sobre ellos mientras perseveraren en su maldad.',
+   refs:['Jn. 20.21-23; Mt. 16.19']},
+  {n:85, dom:31, parte:2, q:'¿De qué manera se cierra y se abre el reino de los cielos por la disciplina eclesiástica?',
+   r:'Cuando aquellos que bajo el nombre de cristianos se muestran en la doctrina o en la vida ajenos a Cristo, y después de haber sido fraternalmente amonestados en diversas ocasiones, no quieren apartarse de sus errores o maldades, son denunciados a la Iglesia; y si no obedecen a la amonestación, son expulsados de la congregación cristiana; y otra vez recibidos, como miembros de Cristo y de su Iglesia, cuando prometen enmienda y lo demuestran por sus obras.',
+   refs:['Mt. 18.15-17; 1Co. 5.4-5; 2Co. 2.6-8']},
+
+  // Domingo 32
+  {n:86, dom:32, parte:3, q:'Si somos liberados por Cristo de todos nuestros pecados y miserias sin merecimiento alguno de nuestra parte, sino solo por la misericordia de Dios, ¿por qué hemos de hacer buenas obras?',
+   r:'Porque después de que Cristo nos ha redimido con su sangre, nos renueva también con su Espíritu Santo a su imagen; a fin de que en toda nuestra vida nos mostremos agradecidos a Dios por tantos beneficios y que Él sea glorificado por nosotros. Además de esto, para que cada uno de nosotros sea asegurado de su fe por los frutos. Y finalmente para que, también por la piedad e integridad de nuestra vida, ganemos a nuestro prójimo para Cristo.',
+   refs:['Ro. 6.13; Ro. 12.1-2; 1P. 2.5,9','Mt. 5.16; 1P. 2.12','2P. 1.10; Gl. 5.6,22','1P. 3.1-2; Ro. 14.19']},
+  {n:87, dom:32, parte:3, q:'¿No pueden salvarse aquellos que siendo desagradecidos y perseverando en sus pecados no se conviertan a Dios de su maldad?',
+   r:'De ninguna manera, porque como lo testifican las Sagradas Escrituras, no heredarán el reino de Dios los fornicarios, los idólatras, los adúlteros, los ladrones, los avaros, los borrachos, los maldicientes.',
+   refs:['1Co. 6.9-10; Ef. 5.5-6; 1Jn. 3.14']},
+
+  // Domingo 33
+  {n:88, dom:33, parte:3, q:'¿De cuántas partes se compone el verdadero arrepentimiento y conversión al Señor?',
+   r:'De dos: la muerte del viejo hombre, y la vivificación del nuevo.',
+   refs:['Ro. 6.1,4-6; Ef. 4.22-24; Col. 3.5-10; 2Co. 7.10']},
+  {n:89, dom:33, parte:3, q:'¿En qué consiste la muerte del hombre viejo?',
+   r:'En que sintamos pesar, de todo corazón, de haber ofendido a Dios con nuestros pecados, aborreciéndolos y evitándolos.',
+   refs:['Ro. 8.13; Jl. 2.13; Os. 6.1']},
+  {n:90, dom:33, parte:3, q:'¿Qué es la vivificación del nuevo hombre?',
+   r:'Es alegrarse de todo corazón en Dios por Cristo, y desear vivir conforme a la voluntad de Dios, así como ejercitarse en toda buena obra.',
+   refs:['Ro. 5.1; Ro. 14.17; Is. 57.15','Ro. 6.10; Gl. 2.20']},
+  {n:91, dom:33, parte:3, q:'¿Qué son las buenas obras?',
+   r:'Únicamente aquellas que se realizan con fe verdadera, conforme a la Ley de Dios, y se aplican solamente a su gloria; y no aquellas que están fundadas en nuestras buenas intenciones o sobre instituciones humanas.',
+   refs:['Ro. 14.23','Lv. 18.4; 1S. 15.22; Ef. 2.10','1Co. 10.31','Ez. 20.18-19; Is. 29.13; Mt. 15.7-9']},
+
+  // Domingo 34
+  {n:92, dom:34, parte:3, q:'¿Cuál es la Ley de Dios?',
+   r:'Yo soy Jehová, tu Dios, que te saqué de la tierra de Egipto, de casa de servidumbre. I. No tendrás dioses ajenos delante de mí. II. No te harás imagen… III. No tomarás el nombre de Jehová tu Dios en vano. IV. Acuérdate del día de reposo para santificarlo… V. Honra a tu padre y a tu madre. VI. No matarás. VII. No cometerás adulterio. VIII. No hurtarás. IX. No hablarás contra tu prójimo falso testimonio. X. No codiciarás…',
+   refs:['Ex. 20.1-17; Dt. 5.6-21']},
+  {n:93, dom:34, parte:3, q:'¿Cómo se dividen estos diez mandamientos?',
+   r:'En dos tablas: de las cuales la primera enseña lo que debemos hacer para con Dios; la segunda, lo que debemos hacer para con nuestro prójimo.',
+   refs:['Dt. 4.13; Ex. 34.28','Mt. 22.37-40']},
+  {n:94, dom:34, parte:3, q:'¿Qué manda Dios en el primer mandamiento?',
+   r:'Que yo, que deseo la salvación de mi alma, evite y huya de toda idolatría, hechicería, encantamiento, superstición, invocación de santos y de otras criaturas; y que conozca rectamente al único verdadero Dios, en Él solo confíe con toda humildad y paciencia, a Él que de todo corazón le ame, tema y reverencie; de tal manera que esté dispuesto a renunciar a todas las criaturas antes que cometer la menor cosa contra su voluntad.',
+   refs:['1Jn. 5.21; Lv. 19.31; Mt. 4.10','Jn. 17.3','Jer. 17.5,7','1P. 5.5','He. 10.36; Ro. 5.3-4','Dt. 6.5; Mt. 22.37','Dt. 6.2; Pr. 1.7','Mt. 4.10; Dt. 10.20','Mt. 5.29; Mt. 10.37']},
+  {n:95, dom:34, parte:3, q:'¿Qué es idolatría?',
+   r:'Es poner en el lugar que solo corresponde al Dios verdadero que se ha revelado por su Palabra, o junto a Él, cualquier otra cosa en la cual se ponga confianza.',
+   refs:['Ef. 5.5; 1Cr. 16.26; Fil. 3.19']},
+
+  // Domingo 35
+  {n:96, dom:35, parte:3, q:'¿Qué pide Dios en el segundo mandamiento?',
+   r:'Que no representemos a Dios por medio de alguna imagen o figura, y solo le rindamos culto como Él ha mandado en su Palabra.',
+   refs:['Is. 40.18-19; Dt. 4.15-16; Ro. 1.23','1S. 15.23; Mt. 15.9']},
+  {n:97, dom:35, parte:3, q:'¿No es lícito hacer ninguna imagen?',
+   r:'Ni podemos, ni debemos representar a Dios de ninguna manera, y aun en el caso de que fuese lícito representar a las criaturas, Dios prohíbe hacer o poseer ninguna imagen destinada a ser adorada o empleada en su servicio.',
+   refs:['Is. 40.25','Ex. 34.17; Ex. 23.34; Nm. 33.52']},
+  {n:98, dom:35, parte:3, q:'¿No se podrían tolerar las imágenes en las iglesias, como si fuesen libros para enseñar a los ignorantes?',
+   r:'No, porque nosotros no debemos ser más sabios que Dios, que no quiere instruir a su pueblo por imágenes mudas, sino por la predicación viva de su Palabra.',
+   refs:['Jer. 10.8; Hab. 2.18-19','Ro. 10.14-15; 2Ti. 3.16-17']},
+
+  // Domingo 36
+  {n:99, dom:36, parte:3, q:'¿Qué nos enseña el tercer mandamiento?',
+   r:'Que dejemos de blasfemar o profanar el nombre de Dios por medio de falsos juramentos y maldiciones, y aún inútiles juramentos; que no nos hagamos partícipes de tan horrendos pecados al callar cuando los oigamos. Que empleemos el santo nombre de Dios con temor y veneración, a fin de que Él sea rectamente confesado, invocado y glorificado por nuestras palabras y hechos.',
+   refs:['Lv. 24.15-16','Lv. 19.12','Mt. 5.37; Stg. 5.12','Lv. 5.1; Pr. 29.24','Jer. 4.2; Is. 45.23','Mt. 10.32; Ro. 10.9-10','Sal. 50.15; 1Ti. 2.8','Col. 3.17']},
+  {n:100, dom:36, parte:3, q:'¿Es tan grave pecado el profanar el nombre de Dios por medio de juramentos y blasfemias, que Dios también se enoja contra aquellos que no se opusieron y no lo prohibieron con todas sus fuerzas?',
+   r:'Sí, porque no hay mayor pecado ni cosa que a Dios más ofenda que el profanar su nombre, por lo cual mandó que esta maldad fuese castigada con la muerte.',
+   refs:['Pr. 29.24; Lv. 5.1','Lv. 24.16']},
+
+  // Domingo 37
+  {n:101, dom:37, parte:3, q:'¿Se puede jurar santamente en nombre de Dios?',
+   r:'Sí, cuando el magistrado o la necesidad así lo exijan para sostener y confirmar la fe y la verdad, para la gloria de Dios y el bien de nuestro prójimo. Pues tal manera de prestar juramento está fundada en la palabra de Dios y ha sido rectamente empleada por los santos, tanto en el Antiguo como en el Nuevo Testamento.',
+   refs:['Dt. 6.13; Is. 48.1; He. 6.16','Gn. 21.24; Gn. 31.53; 2Co. 1.23']},
+  {n:102, dom:37, parte:3, q:'¿Es lícito jurar por los santos u otras criaturas?',
+   r:'No. Porque el legítimo juramento es una invocación de Dios, por la cual se le pide que Él, como el que solo ve los corazones, sea testigo de la verdad, y castigue si el juramento es falso; este honor le corresponde a Él.',
+   refs:['2Co. 1.23; Ro. 9.1','Mt. 5.34-36; Stg. 5.12']},
+
+  // Domingo 38
+  {n:103, dom:38, parte:3, q:'¿Qué ordena Dios en el cuarto mandamiento?',
+   r:'Primero, que el ministerio de la Palabra y la enseñanza sean mantenidos, y que yo frecuente asiduamente la iglesia, la congregación de Dios, sobre todo el día de reposo, para oír la Palabra de Dios y participar de los santos sacramentos, para invocar públicamente al Señor y para contribuir cristianamente a ayudar a los necesitados. Además, que todos los días de mi vida cese de mal obrar, para que sea Dios mismo quien obre en mi corazón por su Espíritu, y de este modo pueda empezar en esta vida el Sábado eterno.',
+   refs:['Tit. 1.5; 1Co. 9.13-14','Hch. 2.42; Sal. 40.9-10','1Ti. 4.13','1Co. 11.33','1Ti. 2.1','1Co. 16.2','Is. 66.23']},
+
+  // Domingo 39
+  {n:104, dom:39, parte:3, q:'¿Qué manda Dios en el quinto mandamiento?',
+   r:'Que muestre a mi padre y a mi madre y a todos mis superiores, honor, amor y fidelidad, que me someta obedientemente a sus buenas enseñanzas y castigos, soportando también pacientemente sus flaquezas, pues Dios quiere regirnos por medio de ellos.',
+   refs:['Ef. 6.1-2,5; Col. 3.18,20; Ro. 13.1','Pr. 23.22; 1P. 2.18','Ef. 6.4,9; Col. 3.20; Ro. 13.2-3']},
+
+  // Domingo 40
+  {n:105, dom:40, parte:3, q:'¿Qué exige Dios en el sexto mandamiento?',
+   r:'Que ni por mis pensamientos, palabras, actitud y aún menos por mis actos, por mí mismo o por medio de otro, llegue a injuriar, odiar, ofender o matar a mi prójimo; por el contrario, que renuncie a todo deseo de venganza; que no me haga mal a mí mismo o me exponga temerariamente al peligro. Para impedir esto, el magistrado posee la espada.',
+   refs:['Mt. 5.21-22; Gn. 9.6','Ef. 4.26; Ro. 12.19; Mt. 5.25','Ro. 13.14; Mt. 4.7','Gn. 9.6; Ro. 13.4']},
+  {n:106, dom:40, parte:3, q:'¿Este mandamiento solo prohíbe matar?',
+   r:'Al prohibir la muerte Dios nos enseña que Él detesta todo lo que de ello se origina, como la envidia, el odio, la ira y el deseo de venganza, considerando todo esto como verdadero homicidio.',
+   refs:['Pr. 14.30; Ro. 1.29','1Jn. 2.11','Stg. 1.20; Gl. 5.19-21','1Jn. 3.15']},
+  {n:107, dom:40, parte:3, q:'¿Es suficiente, como hemos dicho, el no matar a nuestro prójimo?',
+   r:'No; pues Dios, condenando la envidia, el odio y la ira, quiere que amemos a nuestro prójimo como a nosotros mismos, usando para con él toda benignidad, mansedumbre, paciencia y misericordia, impidiendo hasta donde nos sea posible el mal que le podría sobrevenir, haciendo bien incluso a nuestros enemigos.',
+   refs:['Mt. 22.39; Ro. 12.10','Ef. 4.2; Gl. 6.1-2','Ex. 23.5','Mt. 5.44-45; Ro. 12.20']},
+
+  // Domingo 41
+  {n:108, dom:41, parte:3, q:'¿Qué enseña el séptimo mandamiento?',
+   r:'Que Dios maldice toda deshonestidad, y en consecuencia nosotros debemos también aborrecerla de todo corazón y vivir casta y sobriamente, sea en el santo estado de matrimonio, o en otro estado.',
+   refs:['Lv. 18.28','Jd. 1.23','1Ts. 4.3-5','He. 13.4; 1Co. 7.7']},
+  {n:109, dom:41, parte:3, q:'¿En este mandamiento, prohíbe solo Dios el adulterio y pecados semejantes?',
+   r:'Como nuestro cuerpo y alma son templo del Espíritu Santo, Dios quiere que conservemos ambos puros y santos. Para ello prohíbe toda impureza en nuestras acciones, nuestros gestos, nuestras palabras, nuestros pensamientos y deseos, y todo lo que incita al hombre a ello.',
+   refs:['Ef. 5.3-4; 1Co. 6.18-19','Mt. 5.27-28','Ef. 5.18; 1Co. 15.33']},
+
+  // Domingo 42
+  {n:110, dom:42, parte:3, q:'¿Qué prohíbe Dios en el octavo mandamiento?',
+   r:'Dios prohíbe no solamente el robo y la rapiña que castiga la autoridad, sino que llama también robo a todos los medios malos y engaños con los cuales tratamos de apoderarnos del bien de nuestro prójimo, ya sea por la fuerza o por una apariencia de derecho, como son: el peso falso, la mala mercadería, la moneda falsa, la usura, o por cualquier otro medio prohibido por Dios. También prohíbe toda avaricia y todo uso inútil de sus dones.',
+   refs:['1Co. 6.10; Is. 33.1','Lc. 3.14; 1Ts. 4.6','Pr. 11.1; Ez. 45.9-10','Sal. 15.5; Lc. 6.35','1Co. 6.10','Pr. 23.20-21']},
+  {n:111, dom:42, parte:3, q:'¿Qué te ordena Dios en este mandamiento?',
+   r:'Buscar en la medida de mis fuerzas aquello que sea útil a mi prójimo, de hacer con él lo que yo quisiera que él hiciese conmigo, y trabajar fielmente a fin de poder asistir a los necesitados en su pobreza.',
+   refs:['Mt. 7.12','Ef. 4.28']},
+
+  // Domingo 43
+  {n:112, dom:43, parte:3, q:'¿Qué se pide en el noveno mandamiento?',
+   r:'Que no levante falsos testimonios contra nadie, que no interprete mal las palabras de los demás, que no sea ni detractor ni calumniador. Que no ayude a condenar a nadie temerariamente y sin haberle escuchado; que huya de toda clase de mentira y engaño como obras propias del diablo. Que en los juicios como en cualquier otra ocasión, ame la verdad, la anuncie y la confiese sinceramente, y por último que procure con todas mis fuerzas defender la honra y reputación de mi prójimo.',
+   refs:['Pr. 19.5,9','Sal. 15.3; Sal. 50.19-20','Ro. 1.30','Mt. 7.1; Lc. 6.37','Jn. 8.44','Pr. 12.22; Pr. 13.5','1Co. 13.6; Ef. 4.25','1P. 4.8']},
+
+  // Domingo 44
+  {n:113, dom:44, parte:3, q:'¿Qué ordena el décimo mandamiento?',
+   r:'Que ni por deseo o pensamiento nuestros corazones se rebelen jamás contra alguno de los mandamientos de Dios, sino que en todo tiempo aborrezcamos el pecado de todo corazón y nos deleitemos en toda justicia.',
+   refs:['Ro. 7.7']},
+  {n:114, dom:44, parte:3, q:'¿Pueden guardar perfectamente estos mandamientos los que son convertidos a Dios?',
+   r:'No, porque incluso los más santos, en tanto estén en esta vida, no cumplen más que con un pequeño principio de esta obediencia. Sin embargo, empiezan a vivir firmemente no solo según algunos, sino todos los mandamientos de Dios.',
+   refs:['Jn. 1.8; Ro. 7.14-15; Ec. 7.20','Ro. 7.22; Sal. 1.2']},
+  {n:115, dom:44, parte:3, q:'Entonces, ¿por qué quiere Dios que se nos predique tan rigurosamente los diez mandamientos, si no hay nadie que pueda observarlos perfectamente en esta vida?',
+   r:'Primeramente, para que durante toda nuestra vida conozcamos más y más cuán grande es la inclinación de nuestra naturaleza a pecar, y así busquemos con más fervor la remisión de nuestros pecados y la justicia de Cristo. Después, que nos apliquemos sin descanso a suplicar a Dios la gracia de su Espíritu Santo, para que cada día seamos más renovados a su imagen, hasta que, después de esta vida, alcancemos la perfección que nos es propuesta.',
+   refs:['Ro. 3.20; 1Jn. 1.9','Mt. 5.6; Ro. 7.24-25','1Co. 9.24; Fil. 3.12-14']},
+
+  // Domingo 45
+  {n:116, dom:45, parte:3, q:'¿Por qué es necesaria la oración a los cristianos?',
+   r:'Porque es el punto principal de nuestro agradecimiento que Dios pide de nosotros, y porque Él quiere dar su gracia y su Espíritu Santo solo a aquellos que se lo piden con oraciones ardientes y continuas, dándole gracias.',
+   refs:['Sal. 50.14-15','Mt. 7.7; Lc. 11.9,13; 1Ts. 5.17']},
+  {n:117, dom:45, parte:3, q:'¿Qué es necesario en la oración para que esta agrade a Dios y sea oída por él?',
+   r:'Primero, que pidamos de todo corazón al solo y verdadero Dios, el cual se ha manifestado en su palabra, todas las cosas que Él desea que le pidamos. Segundo, que reconociendo sinceramente toda nuestra pobreza y miseria, nos humillemos delante de su majestad. Y por último que apoyándonos sobre este firme fundamento, sepamos que, pese a nuestra indignidad, Él escuchará nuestra oración por amor del Señor Jesucristo, como nos lo ha prometido en su palabra.',
+   refs:['Jn. 4.24; Sal. 145.18','Ap. 19.10; Jn. 4.22-24','Ro. 8.26; 1Jn. 5.14; Stg. 1.5','2Cr. 20.12','Sal. 2.11; Is. 66.2','Ro. 10.14; Stg. 1.6','Jn. 14.13; Jn. 16.23; Dn. 9.18','Mt. 7.8; Sal. 27.8']},
+  {n:118, dom:45, parte:3, q:'¿Qué nos ha mandado Dios que le pidamos?',
+   r:'Todo lo que es necesario para el alma y para el cuerpo, lo cual, nuestro Señor Jesucristo, ha incluido en la oración que él mismo nos ha enseñado.',
+   refs:['Stg. 1.17; Mt. 6.33']},
+  {n:119, dom:45, parte:3, q:'¿Qué dice esta oración?',
+   r:'Padre nuestro que estás en los cielos, santificado sea tu nombre. Venga tu reino. Hágase tu voluntad, como en el cielo, así también en la tierra. El pan nuestro de cada día, dánoslo hoy. Y perdónanos nuestras deudas, como también nosotros perdonamos a nuestros deudores. Y no nos metas en tentación, mas líbranos del mal; porque tuyo es el reino, y el poder, y la gloria, por todos los siglos. Amén.',
+   refs:['Mt. 6.9-13; Lc. 11.2-4']},
+
+  // Domingo 46
+  {n:120, dom:46, parte:3, q:'¿Por qué nos pide nuestro Señor Jesucristo que nos dirijamos a Dios diciendo: «Padre nuestro»?',
+   r:'Para despertar en nosotros, desde el principio de nuestra oración, el respeto filial y la confianza en Dios que deben ser el fundamento de nuestra oración.',
+   refs:['Mt. 7.9-11; Lc. 11.11-13']},
+  {n:121, dom:46, parte:3, q:'¿Por qué se añade: Que estás en los cielos?',
+   r:'A fin de que no tengamos ninguna idea terrestre de la majestad celestial de Dios, y esperemos de su omnipotencia lo que necesitamos para nuestro cuerpo y nuestra alma.',
+   refs:['Jer. 23.23-24; Hch. 17.24-25','Ro. 10.12']},
+
+  // Domingo 47
+  {n:122, dom:47, parte:3, q:'¿Cuál es la primera súplica?',
+   r:'Santificado sea tu nombre, es decir, concédenos ante todo que te conozcamos rectamente, y que santifiquemos y celebremos tu omnipotencia, sabiduría, bondad, justicia, misericordia y verdad, que se manifiestan en todas tus obras. Concédenos también, que toda nuestra vida sea siempre dirigida a este fin: que tu santísimo nombre no sea por nosotros blasfemado ni menospreciado, sino honrado y glorificado.',
+   refs:['Jn. 17.3; Jer. 9.24; Mt. 16.17','Sal. 119.137; Ro. 11.33-36','Sal. 71.8; Sal. 115.1']},
+
+  // Domingo 48
+  {n:123, dom:48, parte:3, q:'¿Cuál es su segunda súplica?',
+   r:'Venga tu reino, es decir; reina de tal modo sobre nosotros por tu Palabra y Espíritu, que nos sometamos cada vez más y más a Ti. Conserva y aumenta tu iglesia. Destruye las obras del diablo y todo poder que se levante contra Ti, lo mismo que todos los consejos que se toman contra tu Palabra, hasta que la plenitud de tu reino venga, cuando Tú serás todo en todos.',
+   refs:['Sal. 143.10; Mt. 6.33','Sal. 51.18; Sal. 122.6','1Jn. 3.8; Ro. 16.20','Ap. 22.20; Ro. 8.22-23','1Co. 15.28']},
+
+  // Domingo 49
+  {n:124, dom:49, parte:3, q:'¿Cuál es la tercera súplica?',
+   r:'Sea hecha tu voluntad, como en el cielo, así también en la tierra. Es decir, haz que nosotros y todos los hombres, renunciemos a nuestra propia voluntad, y con toda humildad obedezcamos la tuya que es la única buena, para que cada uno de nosotros cumpla su deber y vocación, tan fiel y gozosamente como lo hacen los ángeles en el cielo.',
+   refs:['Mt. 16.24; Tit. 2.11-12','Lc. 22.42; Ro. 12.2','1Co. 7.24','Sal. 103.20-21']},
+
+  // Domingo 50
+  {n:125, dom:50, parte:3, q:'¿Cuál es la cuarta súplica?',
+   r:'Danos hoy nuestro pan cotidiano, es decir, dígnate proveernos de todo lo que es necesario para el cuerpo, a fin de que, por ello reconozcamos que Tú eres la única fuente de todo bien, y que ni nuestras necesidades, ni trabajo, ni siquiera los bienes que Tú nos concedes, nos aprovechan, antes nos dañan sin tu bendición. Por tanto, concédenos que apartemos nuestra confianza de todas las criaturas, para ponerla solo en Ti.',
+   refs:['Sal. 145.15; Mt. 6.26','Stg. 1.17; Hch. 14.17','1Co. 15.58; Sal. 37.16; Sal. 127.1-2','Sal. 55.22-23; Sal. 62.10; Jer. 17.5,7']},
+
+  // Domingo 51
+  {n:126, dom:51, parte:3, q:'¿Cuál es la quinta súplica?',
+   r:'Perdónanos nuestras deudas, como también nosotros perdonamos a nuestros deudores; es decir, por la preciosa sangre de Jesucristo, dígnate no imputarnos, a nosotros pobres pecadores, nuestros pecados ni la maldad que está arraigada en nosotros, así como nosotros sentimos el firme propósito de perdonar de todo corazón a nuestro prójimo.',
+   refs:['Sal. 51.1; Sal. 143.2; 1Jn. 2.1; Ro. 8.1','Mt. 6.14']},
+
+  // Domingo 52
+  {n:127, dom:52, parte:3, q:'¿Cuál es la sexta súplica?',
+   r:'No nos metas en tentación, más líbranos del mal; es decir, dado que nosotros mismos no podríamos subsistir un solo instante, y dado que nuestros enemigos mortales como son Satanás, el mundo y nuestra propia carne, nos hacen continua guerra; dígnate sostenernos y fortificarnos por la potencia de tu Espíritu Santo, para que podamos resistirles valerosamente, y no sucumbamos en ese combate espiritual, hasta que logremos finalmente la victoria.',
+   refs:['Jn. 15.5; Sal. 103.14','1P. 5.8; Ef. 6.12','Jn. 15.19','Ro. 7.23; Gl. 5.17','Mt. 26.41; Mr. 13.33','1Ts. 3.13; 1Ts. 5.23']},
+  {n:128, dom:52, parte:3, q:'¿Cómo concluyes esta oración?',
+   r:'Porque tuyo es el reino, el poder, y la gloria, por todos los siglos. Esto es: Te pedimos todo esto, porque siendo nuestro Rey Todopoderoso, Tú puedes y quieres concedernos toda clase de bien, y esto para que, no a nosotros, sino a tu santo nombre sea toda gloria por todos los siglos.',
+   refs:['Ro. 10.12; 2P. 2.9','Jn. 14.13; Jer. 33.8-9; Sal. 115.1']},
+  {n:129, dom:52, parte:3, q:'¿Qué significa la palabra: Amén?',
+   r:'Amén quiere decir: esto es verdadero y cierto. Porque mi oración es más ciertamente escuchada por Dios, que lo que yo siento en mi corazón, que he deseado de Él.',
+   refs:['2Co. 1.20; 2Ti. 2.13']},
+];
+
+const PARTE_LABEL = ['', 'Primera Parte: Miseria del hombre', 'Segunda Parte: Redención del hombre', 'Tercera Parte: La gratitud'];
+let activeQ = null;
+
+// ── BUILD SIDEBAR ──
+function buildSidebar() {
+  const container = document.getElementById('lista-preguntas');
+  let lastDom = null;
+
+  PREGUNTAS.forEach(q => {
+    if(q.dom !== lastDom) {
+      const dh = document.createElement('div');
+      dh.className = 'domingo-header';
+      dh.dataset.dom = q.dom;
+      dh.textContent = `Domingo ${q.dom}`;
+      container.appendChild(dh);
+      lastDom = q.dom;
+    }
+    const item = document.createElement('div');
+    item.className = 'q-item';
+    item.id = `qi-${q.n}`;
+    item.dataset.q = q.n;
+    item.dataset.text = (q.q + ' ' + q.r).toLowerCase();
+    item.innerHTML = `<span class="q-num">${q.n}.</span><span class="q-preview">${truncate(q.q, 55)}</span>`;
+    item.onclick = () => showQ(q.n);
+    container.appendChild(item);
+  });
+}
+
+function truncate(str, len) {
+  return str.length > len ? str.slice(0, len) + '…' : str;
+}
+
+// ── BUSCADOR ──
+function buscar() {
+  const val = document.getElementById('buscar').value.toLowerCase().trim();
+  const items = document.querySelectorAll('.q-item');
+  const headers = document.querySelectorAll('.domingo-header');
+  let vis = 0;
+
+  // Ocultar/mostrar items
+  const domVis = {};
+  items.forEach(item => {
+    const match = !val || item.dataset.text.includes(val);
+    item.classList.toggle('hidden', !match);
+    if(match) { vis++; const d = PREGUNTAS[+item.dataset.q - 1].dom; domVis[d] = true; }
+  });
+
+  // Ocultar headers sin preguntas visibles
+  headers.forEach(h => {
+    const d = +h.dataset.dom;
+    h.style.display = domVis[d] ? '' : 'none';
+  });
+
+  document.getElementById('no-results').style.display = vis === 0 ? 'block' : 'none';
+  document.getElementById('search-count').textContent = val ? `${vis} resultado${vis !== 1 ? 's' : ''}` : `129 preguntas`;
+}
+
+// ── SHOW QUESTION ──
+function showQ(n) {
+  const q = PREGUNTAS[n - 1];
+  document.getElementById('welcome').style.display = 'none';
+
+  // Activar sidebar item
+  document.querySelectorAll('.q-item').forEach(i => i.classList.remove('active'));
+  const sideItem = document.getElementById(`qi-${n}`);
+  if(sideItem) { sideItem.classList.add('active'); sideItem.scrollIntoView({block:'nearest'}); }
+
+  // Ocultar todas las cards
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+
+  // Crear o mostrar card
+  let card = document.getElementById(`qcard-${n}`);
+  if(!card) {
+    card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `qcard-${n}`;
+
+    const parte = q.parte ? PARTE_LABEL[q.parte] : '';
+    const refsHTML = q.refs && q.refs.length > 0 ? `
+      <button class="refs-toggle" onclick="toggleRefs(${n})">
+        <span>Referencias bíblicas (${q.refs.length})</span><span class="refs-chevron">▾</span>
+      </button>
+      <div class="refs-box" id="refs-${n}">
+        ${q.refs.map((r,i) => `<div class="ref-item"><span class="ref-num">${i+1}.</span> <span class="ref-cite">${r}</span></div>`).join('')}
+      </div>` : '';
+
+    card.innerHTML = `
+      <div class="q-card-header">
+        <div class="q-card-meta">
+          <div class="q-card-num">${n}</div>
+          <div class="q-card-tags">
+            <span class="q-card-domingo">Domingo ${q.dom}</span>
+            ${parte ? `<span class="q-card-parte">${parte}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <p class="q-label">Pregunta ${n}</p>
+      <p class="q-text">${q.q}</p>
+      <p class="r-label">Respuesta</p>
+      <div class="r-box"><p class="r-text">${q.r}</p></div>
+      ${refsHTML}
+      <div class="q-nav">
+        <button class="q-nav-btn" onclick="showQ(${n-1})" ${n <= 1 ? 'disabled' : ''}>← Anterior</button>
+        <button class="q-nav-btn" onclick="showQ(${n+1})" ${n >= 129 ? 'disabled' : ''}>Siguiente →</button>
+      </div>`;
+
+    document.getElementById('cards-container').appendChild(card);
+  }
+
+  card.classList.add('active');
+  activeQ = n;
+  window.scrollTo({top: document.querySelector('.layout').offsetTop - 80, behavior:'smooth'});
+}
+
+function toggleRefs(n) {
+  const box = document.getElementById(`refs-${n}`);
+  const btn = box.previousElementSibling;
+  box.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+// Cursor
+const cur = document.getElementById('cur'), ring = document.getElementById('ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function loop(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('a').forEach(a => {
+  a.addEventListener('mouseenter', () => { ring.style.width='50px'; ring.style.height='50px'; });
+  a.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; });
+});
+
+buildSidebar();
+</script>
+</body>
+</html>

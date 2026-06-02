@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Credos de la Iglesia — Teología Logos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:     #1a1610;
+      --bg2:    #221e16;
+      --bg3:    #2c2619;
+      --gold:   #c8a84b;
+      --gold2:  #e8d48a;
+      --cream:  #f0ead8;
+      --muted:  #9a9080;
+      --dim:    #6b6050;
+      --border: rgba(200,168,75,0.18);
+      --serif:  'Cinzel', serif;
+      --display:'Cinzel Decorative', cursive;
+      --body:   'EB Garamond', serif;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--cream); font-family:var(--body); overflow-x:hidden; cursor:none; min-height:100vh; display:flex; flex-direction:column; }
+
+    .cursor      { position:fixed; width:8px; height:8px; background:var(--gold); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--gold); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); opacity:0.4; transition:width .2s,height .2s; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3.5rem; border-bottom:1px solid var(--border); backdrop-filter:blur(16px); background:rgba(26,22,16,0.9); }
+    .nav-logo { font-family:var(--display); font-size:12px; letter-spacing:0.14em; color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:10px; }
+    .logo-mark { width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--serif); }
+    .nav-center { display:flex; list-style:none; border:1px solid var(--border); }
+    .nav-center li a { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:10px 28px; display:block; border-right:1px solid var(--border); transition:color .3s,background .3s; }
+    .nav-center li:last-child a { border-right:none; }
+    .nav-center li a:hover { color:var(--gold); background:rgba(200,168,75,0.06); }
+    .nav-center li a.active { color:var(--gold); background:rgba(200,168,75,0.05); }
+    .nav-right { font-family:var(--serif); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); width:160px; text-align:right; }
+
+    /* PAGE HEADER */
+    .page-header { padding:9rem 4rem 4rem; border-bottom:1px solid var(--border); background:radial-gradient(ellipse 60% 80% at 15% 60%, rgba(200,168,75,0.05) 0%, transparent 65%); }
+    .breadcrumb { font-family:var(--serif); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:2rem; display:flex; align-items:center; gap:10px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .sep { opacity:0.35; }
+    .header-book-tag { font-family:var(--serif); font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; display:flex; align-items:center; gap:12px; }
+    .header-book-tag::before { content:''; display:block; width:24px; height:1px; background:var(--gold); opacity:0.5; }
+    .page-header h1 { font-family:var(--display); font-size:clamp(1.6rem,4vw,3.2rem); color:var(--cream); font-weight:400; margin-bottom:0.5rem; line-height:1.15; }
+    .page-header h1 span { color:var(--gold); }
+    .page-header .desc { font-family:var(--body); font-style:italic; font-size:1rem; color:var(--muted); max-width:540px; line-height:1.7; margin-top:0.5rem; }
+
+    /* WIDGET */
+    .widget-area { flex:1; max-width:900px; margin:0 auto; width:100%; padding:3rem 4rem 5rem; }
+    .widget-shell { background:var(--bg2); border:1px solid var(--border); padding:2.2rem; }
+
+    .w-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.8rem; }
+    .w-title-sm { font-family:var(--serif); font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); }
+    .w-century { font-family:var(--serif); font-size:10px; letter-spacing:0.18em; color:var(--dim); }
+
+    /* TABS de selección */
+    .credo-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); margin-bottom:2.5rem; }
+
+    .credo-tab {
+      padding:1.4rem 1rem;
+      cursor:pointer; text-align:center;
+      border-right:1px solid var(--border);
+      background:rgba(0,0,0,0.15);
+      transition:background 0.3s;
+      position:relative;
+    }
+    .credo-tab:last-child { border-right:none; }
+    .credo-tab::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform 0.35s ease; }
+    .credo-tab:hover { background:rgba(200,168,75,0.04); }
+    .credo-tab.active { background:rgba(200,168,75,0.07); }
+    .credo-tab.active::after { transform:scaleX(1); }
+
+    .ct-num   { font-family:var(--display); font-size:1.3rem; color:rgba(200,168,75,0.25); display:block; margin-bottom:6px; line-height:1; }
+    .ct-name  { font-family:var(--serif); font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--cream); display:block; margin-bottom:4px; }
+    .credo-tab.active .ct-name { color:var(--gold); }
+    .ct-date  { font-family:var(--body); font-style:italic; font-size:0.8rem; color:var(--dim); display:block; }
+
+    /* PANEL — todo el texto del credo */
+    .credo-panel { display:none; }
+    .credo-panel.active { display:block; }
+
+    /* Texto del credo */
+    .credo-body {
+      border-left:2px solid rgba(200,168,75,0.3);
+      padding:1.8rem 2.2rem;
+      background:rgba(0,0,0,0.15);
+    }
+
+    .credo-body p {
+      font-family:var(--body);
+      font-size:1.08rem;
+      line-height:2.1;
+      color:rgba(240,234,216,0.85);
+      white-space: pre-line;
+    }
+
+    /* Sub-encabezados internos (solo Atanasio) */
+    .credo-subtitle {
+      font-family:var(--serif);
+      font-size:10px; letter-spacing:0.32em;
+      text-transform:uppercase; color:var(--gold);
+      margin:1.8rem 0 0.8rem;
+      display:flex; align-items:center; gap:12px;
+    }
+    .credo-subtitle::after { content:''; flex:1; height:1px; background:rgba(200,168,75,0.15); }
+    .credo-subtitle:first-child { margin-top:0; }
+
+    /* Pie de credo */
+    .credo-footer { margin-top:1.5rem; display:flex; align-items:center; justify-content:space-between; padding-top:1.2rem; border-top:1px solid var(--border); }
+    .cf-ref { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); }
+    .cf-origin { font-family:var(--body); font-style:italic; font-size:0.82rem; color:var(--muted); }
+
+    footer { border-top:1px solid var(--border); padding:2.5rem 4rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-top:auto; }
+    .footer-logo { font-family:var(--display); font-size:11px; letter-spacing:0.14em; color:var(--gold); }
+    .footer-copy  { font-family:var(--serif); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity 0.8s,transform 0.8s; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    @media(max-width:700px){
+      .credo-tabs { grid-template-columns:1fr; }
+      .widget-area { padding:2rem 1.2rem 4rem; }
+      .widget-shell { padding:1.4rem 1.1rem; }
+      nav { padding:1rem 1.2rem; }
+      .nav-right { display:none; }
+      .page-header { padding:7rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html"><span class="logo-mark">Λ</span>Teología Logos</a>
+  <ul class="nav-center">
+    <li><a href="estudios.html">Estudios Bíblicos</a></li>
+    <li><a href="credos.html" class="active">Credos</a></li>
+  </ul>
+  <div class="nav-right">In principio erat Verbum</div>
+</nav>
+
+<header class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a><span class="sep">›</span>
+    <span style="color:var(--cream);">Credos de la Iglesia</span>
+  </div>
+  <p class="header-book-tag">Confesiones históricas · Fe cristiana</p>
+  <h1>Credos de<br><span>la Iglesia</span></h1>
+  <p class="desc">Las confesiones fundamentales de la fe cristiana histórica, formuladas por los concilios y padres de la iglesia para preservar la doctrina ortodoxa.</p>
+</header>
+
+<div class="widget-area">
+  <div class="widget-shell reveal">
+
+    <div class="w-topbar">
+      <span class="w-title-sm">Selecciona un credo</span>
+      <span class="w-century">Siglos II – V d.C.</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="credo-tabs">
+      <div class="credo-tab active" id="ctab0" onclick="goCredo(0)">
+        <span class="ct-num">I</span>
+        <span class="ct-name">Credo Apostólico</span>
+        <span class="ct-date">Siglo II d.C.</span>
+      </div>
+      <div class="credo-tab" id="ctab1" onclick="goCredo(1)">
+        <span class="ct-num">II</span>
+        <span class="ct-name">Credo Niceno</span>
+        <span class="ct-date">Nicea · 325 d.C.</span>
+      </div>
+      <div class="credo-tab" id="ctab2" onclick="goCredo(2)">
+        <span class="ct-num">III</span>
+        <span class="ct-name">Credo de Atanasio</span>
+        <span class="ct-date">Siglo V d.C.</span>
+      </div>
+    </div>
+
+    <!-- ══ CREDO APOSTÓLICO ══ -->
+    <div class="credo-panel active" id="cpanel0">
+      <div class="credo-body">
+        <p>Creo en Dios Padre todopoderoso,
+Creador del cielo y de la tierra,
+Y en Jesucristo, su único Hijo, Señor nuestro;
+que fue concebido por el Espíritu Santo,
+nació de María Virgen;
+padeció bajo el poder de Poncio Pilato,
+fue crucificado, muerto y sepultado;
+descendió a los infiernos,
+al tercer día resucitó de entre los muertos;
+subió a los cielos y está sentado a la diestra
+de Dios Padre Todopoderoso;
+desde allí vendrá al fin del mundo
+a juzgar a los vivos y a los muertos.
+Creo en el Espíritu Santo;
+la Santa Iglesia universal,
+la comunión de los santos;
+el perdón de los pecados;
+la resurrección del cuerpo;
+y la vida perdurable. Amén.</p>
+      </div>
+      <div class="credo-footer">
+        <span class="cf-ref">Credo Apostólico · Siglo II d.C.</span>
+        <span class="cf-origin">Tradición occidental de la iglesia primitiva</span>
+      </div>
+    </div>
+
+    <!-- ══ CREDO NICENO ══ -->
+    <div class="credo-panel" id="cpanel1">
+      <div class="credo-body">
+        <p>Creemos en un solo Dios, Padre Todopoderoso, Creador del cielo y de la tierra, de todo lo visible y lo invisible.
+
+Creemos en un solo Señor, Jesucristo, Hijo único de Dios,
+Nacido del Padre antes de todos los siglos:
+Dios de Dios, Luz de Luz, Dios verdadero de Dios verdadero,
+Engendrado, no creado, de la misma naturaleza que el Padre,
+Por quien todo fue hecho;
+Que por nosotros los hombres y por nuestra salvación bajó del cielo,
+Y por obra del Espíritu Santo se encarnó de María, Virgen, y se hizo hombre;
+Y por nuestra causa fue crucificado en tiempos de Poncio Pilato:
+Padeció y fue sepultado,
+Y resucitó al tercer día, según las Escrituras,
+Y subió al cielo, y está sentado a la derecha del Padre;
+Y de nuevo vendrá con gloria para juzgar a vivos y muertos,
+y su reino no tendrá fin.
+
+Creemos en el Espíritu Santo, Señor y dador de vida,
+que procede del Padre y del Hijo,
+Que con el Padre y el Hijo recibe una misma adoración y gloria,
+y que habló por los profetas.
+
+Creemos en la Iglesia, que es una, santa, católica y apostólica.
+Reconocemos un solo Bautismo para el perdón de los pecados.
+Esperamos la resurrección de los muertos
+y la vida del mundo futuro. Amén.</p>
+      </div>
+      <div class="credo-footer">
+        <span class="cf-ref">Credo Niceno-Constantinopolitano · 325 / 381 d.C.</span>
+        <span class="cf-origin">Concilio de Nicea y Concilio de Constantinopla</span>
+      </div>
+    </div>
+
+    <!-- ══ CREDO DE ATANASIO ══ -->
+    <div class="credo-panel" id="cpanel2">
+      <div class="credo-body">
+
+        <div class="credo-subtitle">Preámbulo</div>
+        <p>Todo el que quiera salvarse debe, ante todo, sostener la fe católica: quien no la guardare íntegra y pura perecerá, sin duda, para siempre.
+
+He aquí la fe católica:</p>
+
+        <div class="credo-subtitle">La Santa Trinidad</div>
+        <p>Veneramos a un Dios en la Trinidad y a la Trinidad en la unidad; sin confundir las personas, sin dividir la sustancia: una es, en efecto, la persona del Padre, otra la del Hijo, otra la del Espíritu Santo; pero el Padre, el Hijo y el Espíritu Santo tienen una misma divinidad, una gloria igual y una misma eterna majestad. Cual es el Padre, tal es el Hijo, tal es el Espíritu Santo; increado es el Padre, increado el Hijo, increado el Espíritu Santo; inmenso es el Padre, inmenso el Hijo, inmenso el Espíritu Santo; eterno es el Padre, eterno es el Hijo, eterno es el Espíritu Santo, y, sin embargo, no son tres eternos, sino un solo eterno, ni tampoco tres increados, ni tres inmensos, sino un increado y un inmenso.
+
+Igualmente omnipotente es el Padre, omnipotente el Hijo, omnipotente el Espíritu Santo y, sin embargo, no son tres omnipotentes, sino un solo omnipotente. Dios es el Padre, Dios es el Hijo, Dios el Espíritu Santo y, sin embargo, no son tres Dioses, sino un solo Dios. Así el Padre es Señor, el Hijo es Señor, el Espíritu Santo es Señor y, sin embargo, no son tres Señores, sino un solo Señor.
+
+El Padre por nadie ha sido hecho; no ha sido creado, ni engendrado; el Hijo proviene únicamente del Padre, no ha sido hecho, creado, sino engendrado; el Espíritu Santo proviene del Padre y del Hijo, no ha sido hecho, ni creado, ni engendrado, sino que procede. Hay, por consiguiente, un solo Padre, no tres Padres; un solo Hijo, no tres Hijos, un solo Espíritu Santo, no tres Espíritus Santos. Y en esta Trinidad nadie es antes o después, nadie es mayor o menor, sino que las tres personas son igualmente eternas y del mismo modo iguales.</p>
+
+        <div class="credo-subtitle">La Encarnación</div>
+        <p>Es necesario para la eterna salvación creer fielmente, también, en la Encarnación de nuestro Señor Jesucristo.
+
+Creer y confesar que nuestro Señor Jesucristo es el Hijo de Dios, Dios y hombre. Es Dios, de la sustancia del Padre, engendrado antes de los siglos; y es hombre, de la sustancia de su madre, nacido en el tiempo. Dios perfecto, hombre perfecto, de un alma y un cuerpo humano, igual al Padre según la divinidad, inferior al Padre según la humanidad.
+
+Aun cuando sea Dios y hombre, no hay, sin embargo, dos Cristos, sino un solo Cristo; uno, no porque la divinidad se haya convertido en carne, sino porque la humanidad ha sido asumida en Dios; uno absolutamente, no por una mezcla de sustancias, sino por la unidad de la persona. Porque, de la misma manera que el alma racional y el cuerpo hacen un hombre, así Dios y el hombre hacen un solo Cristo.
+
+El cual padeció por nuestra salvación, descendió a los infiernos, al tercer día resucitó de entre los muertos, subió a los cielos, está sentado a la diestra de Dios, Padre omnipotente, desde allí vendrá a juzgar a los vivos y a los muertos. A su venida todos los hombres resucitarán con sus cuerpos y darán cuenta de sus propios actos; y los que obraron bien irán a la vida eterna, los que obraron mal, al fuego eterno.
+
+Esta es la fe católica: quien no la creyere fiel y firmemente, no podrá salvarse.</p>
+
+      </div>
+      <div class="credo-footer">
+        <span class="cf-ref">Credo de Atanasio · Siglo V d.C.</span>
+        <span class="cf-origin">Atribuido a Atanasio de Alejandría</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span class="footer-logo">Teología Logos</span>
+  <span class="footer-copy">Λ · In principio erat Verbum</span>
+</footer>
+
+<script>
+function goCredo(i) {
+  document.querySelectorAll('.credo-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.credo-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+}
+
+const cur=document.getElementById('cur'), ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';});
+  a.addEventListener('mouseleave',()=>{ring.style.width='32px';ring.style.height='32px';});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
