@@ -124,8 +124,12 @@
     .ref-item { margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(200,168,75,0.06); }
     .ref-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
     .ref-num { font-family:var(--serif); font-size:9px; letter-spacing:0.15em; color:var(--gold); display:inline-block; min-width:22px; }
-    .ref-cite { font-family:var(--serif); font-size:10px; color:var(--gold); letter-spacing:0.08em; }
-    .ref-text { font-family:var(--body); font-style:italic; font-size:0.88rem; color:var(--muted); line-height:1.65; margin-top:3px; }
+    .ref-cite { font-family:var(--serif); font-size:10px; color:var(--gold); letter-spacing:0.08em; font-weight:500; }
+    .ref-text { font-family:var(--body); font-style:italic; font-size:0.9rem; color:rgba(240,234,216,0.7); line-height:1.75; margin-top:5px; }
+    .ref-loading { font-family:var(--serif); font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); padding:1.2rem 0; text-align:center; display:flex; align-items:center; justify-content:center; gap:10px; }
+    .ref-loading::before { content:''; width:16px; height:16px; border:1px solid var(--dim); border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; display:block; }
+    .ref-error { font-family:var(--body); font-style:italic; font-size:0.85rem; color:var(--dim); padding:1rem 0; }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
     /* Navegación entre preguntas */
     .q-nav { display:flex; justify-content:space-between; margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); gap:1rem; }
@@ -784,12 +788,13 @@ function showQ(n) {
     card.id = `qcard-${n}`;
 
     const parte = q.parte ? PARTE_LABEL[q.parte] : '';
+    const refsKey = `refs-loaded-${n}`;
     const refsHTML = q.refs && q.refs.length > 0 ? `
-      <button class="refs-toggle" onclick="toggleRefs(${n})">
+      <button class="refs-toggle" id="refbtn-${n}" onclick="toggleRefs(${n})">
         <span>Referencias bíblicas (${q.refs.length})</span><span class="refs-chevron">▾</span>
       </button>
       <div class="refs-box" id="refs-${n}">
-        ${q.refs.map((r,i) => `<div class="ref-item"><span class="ref-num">${i+1}.</span> <span class="ref-cite">${r}</span></div>`).join('')}
+        <div class="ref-loading">Cargando versículos…</div>
       </div>` : '';
 
     card.innerHTML = `
@@ -820,11 +825,60 @@ function showQ(n) {
   window.scrollTo({top: document.querySelector('.layout').offsetTop - 80, behavior:'smooth'});
 }
 
-function toggleRefs(n) {
+const refsCache = {};
+
+async function toggleRefs(n) {
   const box = document.getElementById(`refs-${n}`);
-  const btn = box.previousElementSibling;
+  const btn = document.getElementById(`refbtn-${n}`);
+  const isOpen = box.classList.contains('open');
+
   box.classList.toggle('open');
   btn.classList.toggle('open');
+
+  // Si ya está cargado o se está cerrando, no hacer nada más
+  if(isOpen || refsCache[n]) return;
+
+  // Cargar versículos con la API
+  const q = PREGUNTAS[n - 1];
+  refsCache[n] = true; // marcar como en progreso
+
+  try {
+    const refs = q.refs.join(', ');
+    const prompt = `Dame el texto completo en Reina-Valera 1960 de estos versículos bíblicos: ${refs}
+
+Responde ÚNICAMENTE con JSON válido, sin ningún texto adicional ni backticks. El formato debe ser exactamente:
+{"versiculos": [{"ref": "Ro. 14.8", "texto": "texto completo del versículo aquí"}, ...]}
+
+Incluye cada referencia exactamente como aparece en la lista. Si una referencia agrupa varios versículos (ej: Ro. 5.12,18,19), incluye cada uno por separado con su referencia exacta.`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('').trim();
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    let html = '';
+    parsed.versiculos.forEach((v, i) => {
+      html += `<div class="ref-item">
+        <span class="ref-cite">${v.ref}</span>
+        <p class="ref-text">"${v.texto}"</p>
+      </div>`;
+    });
+
+    box.innerHTML = html;
+  } catch(err) {
+    box.innerHTML = `<p class="ref-error">No se pudieron cargar los versículos. Intenta de nuevo.</p>`;
+    refsCache[n] = false;
+  }
 }
 
 // Cursor
